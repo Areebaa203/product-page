@@ -1,7 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import cartReducer from "./redux/cartSlice";
 import wishlistReducer from "./redux/wishlistSlice";
-import notificationsReducer from "./redux/notificationsSlice";
 
 import {
   persistReducer,
@@ -19,7 +18,6 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
   cart: cartReducer,
   wishlist: wishlistReducer,
-  notifications: notificationsReducer,
 });
 
 // persist config

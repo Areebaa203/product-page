@@ -12,36 +12,39 @@ const cartSlice = createSlice({
   reducers: {
     addToCart(state, action) {
       const newItem = action.payload;
+      const price = Number(newItem.price);
 
       const existing = state.products.find((item) => item.id === newItem.id);
 
       if (existing) {
         existing.quantity += 1;
-        existing.totalPrice += newItem.price;
+        existing.totalPrice += price;
       } else {
         state.products.push({
           id: newItem.id,
-          name: newItem.title, // ✅ title
-          price: newItem.price,
+          name: newItem.title,
+          price: price, // store as number
           quantity: 1,
-          totalPrice: newItem.price,
-          image: newItem.thumbnail, // ✅ thumbnail
+          totalPrice: price, // store as number
+          image: newItem.thumbnail,
         });
       }
 
       state.totalQuantity += 1;
-      state.totalPrice += newItem.price;
+      state.totalPrice += price; // ✅ use number
     },
-
     removeFromCart(state, action) {
       const id = action.payload;
       const item = state.products.find((p) => p.id === id);
-
       if (!item) return;
 
-      state.totalQuantity -= item.quantity;
-      state.totalPrice -= item.totalPrice;
+      state.totalQuantity -= Number(item.quantity || 0);
+      state.totalPrice -= Number(item.totalPrice || 0); // ✅ subtract full item total
       state.products = state.products.filter((p) => p.id !== id);
+
+      // ✅ safety
+      state.totalQuantity = Math.max(0, state.totalQuantity);
+      state.totalPrice = Math.max(0, state.totalPrice);
     },
 
     increaseQuantity(state, action) {
@@ -49,10 +52,11 @@ const cartSlice = createSlice({
       const item = state.products.find((p) => p.id === id);
       if (!item) return;
 
+      const price = Number(item.price);
       item.quantity += 1;
-      item.totalPrice += item.price;
+      item.totalPrice += price;
       state.totalQuantity += 1;
-      state.totalPrice += item.price;
+      state.totalPrice += price;
     },
 
     decreaseQuantity(state, action) {
@@ -60,17 +64,23 @@ const cartSlice = createSlice({
       const item = state.products.find((p) => p.id === id);
       if (!item) return;
 
+      const price = Number(item.price);
+
       if (item.quantity > 1) {
         item.quantity -= 1;
-        item.totalPrice -= item.price;
+        item.totalPrice -= price;
         state.totalQuantity -= 1;
-        state.totalPrice -= item.price;
+        state.totalPrice -= price;
       } else {
-        // optional: remove item if quantity becomes 0
+        // remove item if quantity becomes 0
         state.totalQuantity -= 1;
-        state.totalPrice -= item.price;
+        state.totalPrice -= price;
         state.products = state.products.filter((p) => p.id !== id);
       }
+
+      // ✅ safety
+      state.totalQuantity = Math.max(0, state.totalQuantity);
+      state.totalPrice = Math.max(0, state.totalPrice);
     },
   },
 });
@@ -79,5 +89,8 @@ export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity } =
   cartSlice.actions;
 
 export const selectCartCount = (state) => state.cart.totalQuantity;
+export const selectCartItems = (state) => state.cart.products;
+export const selectCartTotalPrice = (state) => state.cart.totalPrice;
+export const selectCartTotalQty = (state) => state.cart.totalQuantity;
 
 export default cartSlice.reducer;

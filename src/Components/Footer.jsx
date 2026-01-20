@@ -1,0 +1,196 @@
+// Footer.jsx
+import { Link } from "react-router-dom";
+import {
+  Facebook,
+  Instagram,
+  Twitter,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
+import { useState } from "react";
+export default function Footer() {
+  const [email, setEmail] = useState("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+
+    const cleaned = email.trim();
+
+    if (!cleaned) {
+      alert("Please enter your email.");
+      return;
+    }
+
+    alert(`Subscribed with: ${cleaned}`);
+    setEmail("");
+  };
+  return (
+    <footer className="mt-16 border-t border-slate-100 bg-white">
+      {/* Soft top strip */}
+      <div className="bg-purple-50/70">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h3 className="text-2xl font-semibold text-slate-800">
+                Stay in the loop
+              </h3>
+              <p className="mt-1 text-slate-500">
+                Get updates on new arrivals, offers and best picks.
+              </p>
+            </div>
+
+            <form
+              onSubmit={onSubmit}
+              className="flex w-full max-w-xl flex-col gap-3 sm:flex-row"
+            >
+              <div className="relative w-full">
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-slate-700 outline-none ring-0 placeholder:text-slate-400 focus:border-slate-300"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="rounded-2xl bg-slate-800 px-6 py-3 font-medium text-white shadow-sm transition hover:bg-slate-900"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      {/* Main footer */}
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="grid gap-10 md:grid-cols-4">
+          {/* Brand */}
+          <div>
+            <Link to="/" className="text-xl font-semibold text-slate-800">
+              FashionHub
+            </Link>
+
+            <p className="mt-3 max-w-sm text-slate-500">
+              Minimal, modern shopping experience. Discover quality products,
+              curated brands, and clean design.
+            </p>
+
+            <div className="mt-5 flex items-center gap-3">
+              {/* Socials: these should be external links (open new tab) */}
+              <SocialIcon href="https://instagram.com" Icon={Instagram} />
+              <SocialIcon href="https://facebook.com" Icon={Facebook} />
+              <SocialIcon href="https://twitter.com" Icon={Twitter} />
+              <SocialIcon href="https://linkedin.com" Icon={Linkedin} />
+            </div>
+          </div>
+
+          {/* Links */}
+          <div>
+            <h4 className="text-sm font-semibold text-slate-800">Shop</h4>
+            <ul className="mt-4 space-y-3 text-slate-500">
+              <FooterLink label="Category" to="/category" />
+              <FooterLink label="Brand" to="/brand" />
+              <FooterLink label="Offers" to="/offers" />
+              <FooterLink label="New Arrivals" to="/new-arrivals" />
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div>
+            <h4 className="text-sm font-semibold text-slate-800">Support</h4>
+            <ul className="mt-4 space-y-3 text-slate-500">
+              <FooterLink label="FAQs" to="/faqs" />
+              <FooterLink label="Contact" to="/contact" />
+              <FooterLink label="Returns" to="/returns" />
+              <FooterLink label="Shipping" to="/shipping" />
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h4 className="text-sm font-semibold text-slate-800">Contact</h4>
+            <div className="mt-4 space-y-3 text-slate-500">
+              <div className="flex items-center gap-3">
+                <MapPin className="h-5 w-5 text-slate-400" />
+                <span>Karachi, Pakistan</span>
+              </div>
+
+              <a
+                href="tel:+923000000000"
+                className="flex items-center gap-3 hover:text-slate-800"
+              >
+                <Phone className="h-5 w-5 text-slate-400" />
+                <span>+92 300 0000000</span>
+              </a>
+
+              <a
+                href="mailto:support@fashionhub.com"
+                className="flex items-center gap-3 hover:text-slate-800"
+              >
+                <Mail className="h-5 w-5 text-slate-400" />
+                <span>support@fashionhub.com</span>
+              </a>
+
+              <div className="mt-4 rounded-2xl bg-purple-50/70 p-4">
+                <p className="text-sm text-slate-600">
+                  <span className="font-medium text-slate-800">Tip:</span> Use
+                  the filters to quickly find the best deals.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 flex flex-col gap-3 border-t border-slate-100 pt-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+          <p>© {new Date().getFullYear()} FashionHub. All rights reserved.</p>
+
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <Link className="hover:text-slate-800" to="/terms">
+              Terms
+            </Link>
+            <Link className="hover:text-slate-800" to="/privacy">
+              Privacy
+            </Link>
+            <Link className="hover:text-slate-800" to="/cookies">
+              Cookies
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+function FooterLink({ label, to }) {
+  return (
+    <li>
+      <Link
+        to={to}
+        className="transition hover:text-slate-800 hover:underline underline-offset-4"
+      >
+        {label}
+      </Link>
+    </li>
+  );
+}
+
+function SocialIcon({ Icon, href }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="grid h-10 w-10 place-items-center rounded-2xl border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-800"
+      aria-label="social"
+    >
+      <Icon className="h-5 w-5" />
+    </a>
+  );
+}

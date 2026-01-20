@@ -1,4 +1,6 @@
 import { Heart } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductCard({
   product,
@@ -6,6 +8,9 @@ export default function ProductCard({
   onToggleWishlist,
   wished = false,
 }) {
+  const navigate = useNavigate();
+  const [added, setAdded] = useState(false);
+
   const rating = product.rating ?? 4.5;
   const reviews = product.reviewsCount ?? 121;
   const subtitle = product.brand
@@ -15,11 +20,22 @@ export default function ProductCard({
   const fullStars = Math.floor(rating);
 
   return (
-    <div className="rounded-3xl bg-white shadow-sm border border-slate-100 overflow-hidden">
+    <div
+      onClick={() => navigate(`/product/${product.id}`)}
+      className="cursor-pointer rounded-3xl bg-white shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") navigate(`/product/${product.id}`);
+      }}
+    >
       {/* Image */}
       <div className="relative bg-slate-50 p-6">
         <button
-          onClick={() => onToggleWishlist?.(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleWishlist?.(product);
+          }}
           className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full bg-white shadow-sm border border-slate-100"
           aria-label="Wishlist"
           type="button"
@@ -72,22 +88,28 @@ export default function ProductCard({
           <span className="text-sm text-slate-400">({reviews})</span>
         </div>
 
-        {/* Buttons */}
+        {/* Button */}
         <div className="mt-5 flex gap-3">
           <button
-            onClick={() => onAddToCart?.(product)}
-            className="flex-1 h-10 rounded-full bg-slate-800 text-white text-sm font-medium hover:bg-slate-900"
             type="button"
-          >
-            Add To Cart
-          </button>
+            disabled={added}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (added) return;
 
-          <button
-            onClick={() => onToggleWishlist?.(product)}
-            className="flex-1 h-10 rounded-full border border-slate-200 text-slate-700 text-sm font-medium hover:bg-slate-50"
-            type="button"
+              onAddToCart?.(product);
+
+              setAdded(true);
+              setTimeout(() => setAdded(false), 1200); // 1.2s then back
+            }}
+            className={[
+              "flex-1 h-10 rounded-full text-white text-sm font-medium transition cursor-pointer",
+              added
+                ? "bg-gray-700 opacity-90"
+                : "bg-slate-800 hover:bg-slate-900",
+            ].join(" ")}
           >
-            Add Shortlist
+            {added ? "Added" : "Add To Cart"}
           </button>
         </div>
       </div>

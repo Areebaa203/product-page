@@ -13,6 +13,9 @@ export default function ProductPagination({
   setPage,
   loading,
 }) {
+  // ✅ only show when there’s more than 1 page
+  if (!totalPages || totalPages <= 1) return null;
+
   const visibleCount = 7;
 
   const getPages = () => {

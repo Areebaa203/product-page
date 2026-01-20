@@ -37,6 +37,7 @@ const FilterRow = ({ value, onChange }) => {
     <div className="mx-auto max-w-7xl px-4">
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
+          <p>categories</p>
           <Select value={value} onValueChange={onChange}>
             <SelectTrigger className="h-9 w-[180px] rounded-full bg-slate-100 border-0 shadow-none text-xs font-medium">
               <SelectValue placeholder={loading ? "Loading..." : "Category"} />
@@ -52,20 +53,6 @@ const FilterRow = ({ value, onChange }) => {
               ))}
             </SelectContent>
           </Select>
-
-          <div className="h-9 rounded-full bg-slate-100 px-4 text-xs font-medium text-slate-600 flex items-center">
-            Price
-          </div>
-          <div className="h-9 rounded-full bg-slate-100 px-4 text-xs font-medium text-slate-600 flex items-center">
-            Review
-          </div>
-          <div className="h-9 rounded-full bg-slate-100 px-4 text-xs font-medium text-slate-600 flex items-center">
-            Offer
-          </div>
-        </div>
-
-        <div className="h-9 rounded-full border border-slate-200 bg-white px-4 text-xs font-medium text-slate-600 flex items-center">
-          Sort
         </div>
       </div>
     </div>
