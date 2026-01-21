@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 const HeroBanner = () => {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto max-w-7xl px-4">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12">
         {/* CARD */}
         <div
           className="mt-16 relative rounded-2xl bg-[#F3DBF6]/60 min-h-[220px] font-inter"
@@ -15,10 +15,10 @@ const HeroBanner = () => {
           <div className="relative z-10 grid gap-6 px-6 py-10 md:grid-cols-2 md:px-10">
             {/* LEFT */}
             <div>
-              <h2 className="text-2xl font-bold font-inter leading-snug text-slate-700 md:text-3xl">
+              <h1 className="text-2xl font-bold font-inter leading-snug text-slate-700 md:text-3xl">
                 Grab Upto 50% Off On <br className="hidden md:block" />
                 Selected Headphone
-              </h2>
+              </h1>
 
               <Button className="mt-6 rounded-full bg-slate-700 px-7 py-3 text-sm font-semibold text-white hover:bg-slate-800">
                 Buy Now

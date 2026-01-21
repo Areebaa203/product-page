@@ -1,9 +1,9 @@
 // src/pages/contact.jsx  (or wherever your contact page lives)
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Briefcase, Phone, MapPin, ArrowUpRight } from "lucide-react";
+import { Mail, Briefcase, Phone, MapPin, ArrowUpRight, CheckCircle2 } from "lucide-react";
 
 // shadcn form + inputs
 import {
@@ -44,6 +44,7 @@ const BRAND = "#1472B2";
 const BRAND_HOVER = "#0F5F96";
 
 export default function ContactUs() {
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -58,24 +59,21 @@ export default function ContactUs() {
   });
 
   const onSubmit = async (data) => {
-    alert(
-      `Submitted!\n\n` +
-        `Name: ${data.name}\n` +
-        `Email: ${data.email}\n` +
-        `Phone: ${data.phoneCode} ${data.phone}\n` +
-        `Interest: ${data.interest}\n` +
-        `Message: ${data.message}`,
-    );
-
+    setIsSubmitted(true);
     console.log("CONTACT FORM:", data);
     form.reset();
+    
+    // Smoothly hide the success message after 5 seconds
+    setTimeout(() => {
+      setIsSubmitted(false);
+    }, 5000);
   };
 
   const isSubmitting = form.formState.isSubmitting;
 
   return (
     <div className="w-full bg-white">
-      <div className="mx-auto max-w-6xl px-4 py-12">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-12">
         <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
           {/* LEFT CARD */}
           <div className="rounded-2xl bg-slate-50 p-7 shadow-sm border border-slate-100">
@@ -149,6 +147,14 @@ export default function ContactUs() {
             </h2>
 
             <Form {...form}>
+              {isSubmitted && (
+                <div className="mb-6 flex items-center gap-3 rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-emerald-700">
+                  <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-500" />
+                  <p className="text-sm font-medium leading-none">
+                    Your form has been submitted successfully!
+                  </p>
+                </div>
+              )}
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="mt-6 space-y-5"

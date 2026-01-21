@@ -22,8 +22,8 @@ const Navbar = () => {
   const handleCart = () => navigate("/cart");
 
   return (
-    <header className="w-full bg-white shadow-sm">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+    <header className="w-full bg-white shadow-sm sticky top-0 z-50">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-10 md:px-12">
         {/* ================= MOBILE LEFT: CART (only mobile) ================= */}
         <div className="md:hidden flex items-center">
           <button
@@ -47,13 +47,13 @@ const Navbar = () => {
         {/* ================= LEFT: BRAND (always) ================= */}
         <Link
           to="/"
-          className="text-xl font-extrabold italic tracking-tight text-[0D3356] font-inter"
+          className="text-xl font-extrabold italic tracking-tight text-[#0D3356] font-inter"
         >
-          Fashion<span className="text-[0D3356]">Hub</span>
+          FashionHub
         </Link>
 
         {/* ================= DESKTOP MIDDLE: LINKS (unchanged) ================= */}
-        <nav className="hidden md:flex items-center gap-10 text-sm text-slate-600">
+        <nav className="hidden md:flex items-center gap-10 text-[16px] text-slate-600">
           <Link to="/category" className="hover:text-slate-900">
             Category
           </Link>

@@ -1,4 +1,4 @@
-// Footer.jsx
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Facebook,
@@ -8,29 +8,42 @@ import {
   Mail,
   Phone,
   MapPin,
+  CheckCircle2,
 } from "lucide-react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const subscriptionSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address." }),
+});
+
 export default function Footer() {
-  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: zodResolver(subscriptionSchema),
+  });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    setIsSubscribed(true);
+    console.log("Newsletter Subscribe:", data.email);
+    reset();
 
-    const cleaned = email.trim();
-
-    if (!cleaned) {
-      alert("Please enter your email.");
-      return;
-    }
-
-    alert(`Subscribed with: ${cleaned}`);
-    setEmail("");
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+      setIsSubscribed(false);
+    }, 5000);
   };
   return (
     <footer className="mt-16 border-t border-slate-100 bg-white">
       {/* Soft top strip */}
       <div className="bg-purple-50/70">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <h3 className="text-2xl font-semibold text-slate-800">
@@ -42,18 +55,24 @@ export default function Footer() {
             </div>
 
             <form
-              onSubmit={onSubmit}
+              onSubmit={handleSubmit(onSubmit)}
               className="flex w-full max-w-xl flex-col gap-3 sm:flex-row"
             >
               <div className="relative w-full">
                 <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
                 <input
                   type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  {...register("email")}
                   placeholder="Enter your email"
-                  className="w-full rounded-2xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-slate-700 outline-none ring-0 placeholder:text-slate-400 focus:border-slate-300"
+                  className={`w-full rounded-2xl border bg-white py-3 pl-11 pr-4 text-slate-700 outline-none ring-0 placeholder:text-slate-400 focus:border-slate-300 ${
+                    errors.email ? "border-red-500" : "border-slate-200"
+                  }`}
                 />
+                {errors.email && (
+                  <p className="absolute -bottom-6 left-2 text-xs text-red-500">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               <button
@@ -64,11 +83,20 @@ export default function Footer() {
               </button>
             </form>
           </div>
+
+          {isSubscribed && (
+            <div className="mt-4 flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50/50 p-3 text-emerald-700 max-w-xl">
+              <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+              <p className="text-xs font-medium">
+                Successfully subscribed! Check your inbox for updates.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Main footer */}
-      <div className="mx-auto max-w-7xl px-6 py-12">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-12">
         <div className="grid gap-10 md:grid-cols-4">
           {/* Brand */}
           <div>

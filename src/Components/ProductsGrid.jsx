@@ -8,12 +8,16 @@ import ProductCard from "./ProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/cartSlice";
 import { toggleWishlist } from "../redux/wishlistSlice";
+import { useNavigate } from "react-router-dom";
 
 //shadcn skeleton (adjust path if needed)
-import { Skeleton } from "@/components/ui/skeleton";
+import ProductCardSkeleton from "./ProductCardSkeleton";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 const ProductsGrid = ({ category }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // stable selector (no new Set inside useSelector)
   const wishlistItems = useSelector((state) => state.wishlist.items);
@@ -54,9 +58,21 @@ const ProductsGrid = ({ category }) => {
             : `https://dummyjson.com/products/category/${category}`;
 
         const res = await axios.get(url, { params: { limit, skip } });
+        
+        // Merge Local Products
+        const localProducts = JSON.parse(localStorage.getItem("userProducts") || "[]");
+        // Filter by category if selected
+        const visibleLocalProducts = localProducts.filter(p => 
+            !category || category === "__all__" || p.category === category
+        );
 
-        setProducts(res.data.products || []);
-        setTotal(res.data.total ?? 0);
+        // Prepend local products only on the first page
+        const combinedProducts = page === 1 
+            ? [...visibleLocalProducts, ...(res.data.products || [])] 
+            : (res.data.products || []);
+
+        setProducts(combinedProducts);
+        setTotal((res.data.total ?? 0) + visibleLocalProducts.length);
       } catch (err) {
         console.log("Error fetching products:", err);
         setProducts([]);
@@ -98,8 +114,26 @@ const ProductsGrid = ({ category }) => {
     }
   };
 
+  // ---------------- DELETE LOCAL PRODUCT ----------------
+  const handleDeleteProduct = (productId) => {
+    try {
+      // 1. Update Local Storage
+      const localProducts = JSON.parse(
+        localStorage.getItem("userProducts") || "[]"
+      );
+      const updatedLocal = localProducts.filter((p) => p.id !== productId);
+      localStorage.setItem("userProducts", JSON.stringify(updatedLocal));
+
+      // 2. Update State
+      setProducts((prev) => prev.filter((p) => p.id !== productId));
+      setTotal((prev) => prev - 1);
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
+  };
+
   return (
-    <div className="mx-auto max-w-7xl px-4 mt-8">
+    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 mt-8">
       {/* Top info + actions */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-slate-600">
@@ -108,45 +142,28 @@ const ProductsGrid = ({ category }) => {
         </p>
 
         <div className="flex flex-wrap gap-2">
-          <button
-            onClick={addOneProduct}
-            type="button"
-            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-60"
+          <Button
+            onClick={() => navigate("/create-product")}
             disabled={loading}
+            className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 hover:opacity-90 disabled:opacity-60"
           >
-            + Add Product
-          </button>
+            <Plus className="mr-1 h-4 w-4" /> Add Product
+          </Button>
         </div>
       </div>
 
       {/* Grid */}
       {loading ? (
         //  Skeleton Grid (same layout as product grid)
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 12 }).map((_, i) => (
-            <div
-              key={i}
-              className="rounded-2xl border border-slate-200 bg-white p-4"
-            >
-              {/* image */}
-              <Skeleton className="h-40 w-full rounded-xl" />
-
-              {/* title + price + buttons */}
-              <div className="mt-4 space-y-2">
-                <Skeleton className="h-4 w-[80%]" />
-                <Skeleton className="h-4 w-[60%]" />
-                <div className="pt-2 space-y-2">
-                  <Skeleton className="h-9 w-full rounded-xl" />
-                  <Skeleton className="h-9 w-full rounded-xl" />
-                </div>
-              </div>
-            </div>
+            <ProductCardSkeleton key={i} />
           ))}
         </div>
       ) : products.length === 0 ? (
         <div className="py-10 text-slate-500">No products found.</div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((p) => (
             <ProductCard
               key={p.id}
@@ -154,6 +171,7 @@ const ProductsGrid = ({ category }) => {
               wished={wishlistIds.has(p.id)}
               onAddToCart={(prod) => dispatch(addToCart(prod))}
               onToggleWishlist={(prod) => dispatch(toggleWishlist(prod))}
+              onDelete={handleDeleteProduct}
             />
           ))}
         </div>

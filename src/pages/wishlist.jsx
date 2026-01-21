@@ -14,7 +14,7 @@ const WishlistPage = () => {
   const items = useSelector(selectWishlistItems);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-8">
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -32,7 +32,6 @@ const WishlistPage = () => {
             <ArrowLeft className="h-4 w-4" />
             <span>Continue Shopping</span>
           </button>
-
           {items.length > 0 && (
             <button
               onClick={() => dispatch(clearWishlist())}

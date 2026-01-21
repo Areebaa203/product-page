@@ -1,4 +1,4 @@
-import { Heart } from "lucide-react";
+import { Heart, Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -6,18 +6,27 @@ export default function ProductCard({
   product,
   onAddToCart,
   onToggleWishlist,
+  onDelete,
   wished = false,
 }) {
   const navigate = useNavigate();
   const [added, setAdded] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
 
-  const rating = product.rating ?? 4.5;
-  const reviews = product.reviewsCount ?? 121;
+  // Calculate Rating & Reviews
+  const reviewsList = product.reviews || [];
+  const reviewCount = reviewsList.length;
+  
+  const avgRating = reviewCount 
+    ? reviewsList.reduce((acc, r) => acc + (r.rating || 0), 0) / reviewCount
+    : (product.rating || 0);
+
+  const displayRating = Number(avgRating).toFixed(1);
+  const fullStars = Math.round(avgRating);
+
   const subtitle = product.brand
     ? `${product.brand} available`
     : "5 types of shoes available";
-
-  const fullStars = Math.floor(rating);
 
   return (
     <div
@@ -47,6 +56,53 @@ export default function ProductCard({
           />
         </button>
 
+        {product.isUserCreated && (
+          <>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowOptions(!showOptions);
+              }}
+              className="cursor-pointer absolute right-4 top-16 grid h-10 w-10 place-items-center rounded-full bg-white shadow-sm border border-slate-100 text-slate-500 hover:text-slate-800"
+              aria-label="More Options"
+              type="button"
+            >
+              <MoreHorizontal className="h-4 w-4" />
+            </button>
+
+            {showOptions && (
+              <>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate("/create-product", { state: { product } });
+                  }}
+                  className="cursor-pointer absolute right-4 top-28 grid h-10 w-10 place-items-center rounded-full bg-white shadow-sm border border-slate-100 text-slate-500 hover:text-slate-800"
+                  aria-label="Edit"
+                  type="button"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (
+                      confirm("Are you sure you want to delete this product?")
+                    ) {
+                      onDelete?.(product.id);
+                    }
+                  }}
+                  className="cursor-pointer absolute right-4 top-40 grid h-10 w-10 place-items-center rounded-full bg-white shadow-sm border border-slate-100 text-red-500 hover:bg-red-50 hover:text-red-600"
+                  aria-label="Delete"
+                  type="button"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </>
+            )}
+          </>
+        )}
+
         <img
           src={product.thumbnail}
           alt={product.title}
@@ -68,7 +124,7 @@ export default function ProductCard({
           </div>
 
           <p className="text-base font-semibold text-slate-700 whitespace-nowrap">
-            ₹ {Number(product.price).toFixed(2)}
+            $ {Number(product.price).toFixed(2)}
           </p>
         </div>
 
@@ -85,7 +141,7 @@ export default function ProductCard({
               );
             })}
           </div>
-          <span className="text-sm text-slate-400">({reviews})</span>
+          <span className="text-sm text-slate-400">({displayRating})</span>
         </div>
 
         {/* Button */}
