@@ -2,6 +2,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import ProductCard from "../Components/ProductCard";
+import { toggleWishlist } from "../redux/wishlistSlice";
+import { useSelector } from "react-redux";
 import {
   ArrowLeft,
   Truck,
@@ -17,9 +20,18 @@ import {
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/cartSlice"; // adjust path if needed
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+
+// Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/autoplay";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/Components/ui/tabs";
 import ProductDetailSkeleton from "@/Components/ProductDetailSkeleton";
+import ProductCardSkeleton from "../Components/ProductCardSkeleton";
+import { Skeleton } from "@/Components/ui/skeleton";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,6 +42,11 @@ import {
 } from "@/Components/ui/breadcrumb";
 
 export default function ProductDetail() {
+  const wishlistItems = useSelector((state) => state.wishlist.items);
+  const wishlistIds = useMemo(
+    () => new Set(wishlistItems.map((i) => i.id)),
+    [wishlistItems],
+  );
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,6 +54,8 @@ export default function ProductDetail() {
   const [qty, setQty] = useState(5);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [similarProducts, setSimilarProducts] = useState([]);
+  const [loadingSimilar, setLoadingSimilar] = useState(false);
 
   // gallery
   const [activeImg, setActiveImg] = useState("");
@@ -142,6 +161,30 @@ export default function ProductDetail() {
     })();
   }, [id]);
 
+  // -------------------- Similar Products --------------------
+  useEffect(() => {
+    if (!product?.category) return;
+
+    (async () => {
+      try {
+        setLoadingSimilar(true);
+        const res = await axios.get(
+          `https://dummyjson.com/products/category/${product.category}`,
+          { params: { limit: 12 } },
+        );
+        // exclude current product
+        const filtered = (res.data.products || []).filter(
+          (p) => String(p.id) !== id,
+        );
+        setSimilarProducts(filtered);
+      } catch (err) {
+        console.error("Similar products error:", err);
+      } finally {
+        setLoadingSimilar(false);
+      }
+    })();
+  }, [product?.category, id]);
+
   // -------------------- Reviews (API) --------------------
   const reviews = useMemo(
     () => (Array.isArray(product?.reviews) ? product.reviews : []),
@@ -220,21 +263,19 @@ export default function ProductDetail() {
   return (
     <div className="max-w-[1440px] mx-auto px-6 sm:px-10 md:px-12 py-10">
       {/* Top row */}
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 xl:gap-20">
         {/* LEFT: Image + thumbs */}
-        <div>
-          <div className="rounded-2xl bg-slate-50 p-6">
-            <div className="rounded-2xl overflow-hidden bg-white">
-              <img
-                src={activeImg || product.thumbnail}
-                alt={product.title}
-                className="h-[440px] w-full object-contain"
-              />
-            </div>
+        <div className="flex flex-col gap-4">
+          <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white">
+            <img
+              src={activeImg || product.thumbnail}
+              alt={product.title}
+              className="h-[550px] w-full object-contain"
+            />
           </div>
 
           {/* thumbs row + arrows */}
-          <div className="mt-4 flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setThumbIndex((v) => Math.max(0, v - 1))}
@@ -291,36 +332,38 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        {/* RIGHT: Bordered card like screenshot */}
-        <div className="rounded-2xl bg-white p-6">
+        {/* RIGHT: Product Info */}
+        <div className="flex flex-col justify-between py-2">
           {/* Breadcrumbs */}
-          <Breadcrumb className="mb-4">
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to="/">Home</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+          <div className="mb-6 w-fit rounded-lg bg-[#EDF0F8] px-3 py-1.5">
+            <Breadcrumb>
+              <BreadcrumbList>
+                <BreadcrumbItem className="text-[11px] font-medium text-slate-500">
+                  <BreadcrumbLink asChild>
+                    <Link to="/">Home</Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
 
-              <BreadcrumbSeparator />
+                <BreadcrumbSeparator className="text-slate-300" />
 
-              <BreadcrumbItem>
-                <BreadcrumbLink asChild>
-                  <Link to={`/category/${product.category}`}>
-                    {product.category}
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
+                <BreadcrumbItem className="text-[11px] font-medium text-slate-500">
+                  <BreadcrumbLink asChild>
+                    <Link to={`/category/${product.category}`}>
+                      {product.category}
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
 
-              <BreadcrumbSeparator />
+                <BreadcrumbSeparator className="text-slate-300" />
 
-              <BreadcrumbItem>
-                <BreadcrumbPage className="cursor-pointer">
-                  {product.title}
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+                <BreadcrumbItem className="text-[11px] font-bold text-[#3A4980]">
+                  <BreadcrumbPage className="cursor-pointer">
+                    {product.title}
+                  </BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+          </div>
 
           {/* Title + icons */}
           <div className="flex items-start justify-between gap-4">
@@ -345,9 +388,8 @@ export default function ProductDetail() {
               </button>
             </div>
           </div>
-
+          <div className="my-5 h-px bg-slate-200"></div>
           {/* Price + badges row */}
-          {/* Price + badges row (Refactored Layout) */}
           <div className="mt-5 flex items-start gap-4">
             {/* Left: Price Stack */}
             <div className="flex flex-col">
@@ -360,7 +402,7 @@ export default function ProductDetail() {
             </div>
 
             {/* Right: Rating Stack */}
-            <div className="flex flex-col gap-1.5">
+            <div className="flex flex-col gap-1.5 mt-1">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -432,7 +474,7 @@ export default function ProductDetail() {
           {/* Choose size */}
           <div>
             <div className="text-xs text-slate-500 mb-3">Choose a Size</div>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               {sizeOptions.map((s) => {
                 const active = selectedSize === s;
                 return (
@@ -440,16 +482,21 @@ export default function ProductDetail() {
                     key={s}
                     type="button"
                     onClick={() => setSelectedSize(s)}
-                    className="inline-flex items-center gap-2 text-xs text-slate-600 hover:text-slate-900"
+                    className={[
+                      "inline-flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all",
+                      active
+                        ? "bg-[#EDF0F8] text-[#3A4980] border-transparent"
+                        : "bg-[#F3F3F3] text-slate-500 hover:bg-slate-200 border-transparent",
+                    ].join(" ")}
                   >
                     <span
                       className={[
                         "grid h-3.5 w-3.5 place-items-center rounded-full border",
-                        active ? "border-blue-600" : "border-slate-300",
+                        active ? "border-[#3A4980]" : "border-slate-400",
                       ].join(" ")}
                     >
                       {active && (
-                        <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#3A4980]" />
                       )}
                     </span>
                     {s}
@@ -547,13 +594,14 @@ export default function ProductDetail() {
 
       {/* -------------------- TABS (FIX WIDTH + EXACT REVIEWS UI) -------------------- */}
       <div className="mt-10" id="reviews-section">
-        <div className="max-w-3xl">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="w-full justify-start rounded-none bg-transparent p-0 border-b border-slate-200">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          {/* Narrow navigation area */}
+          <div className="max-w-xs border-b border-slate-200">
+            <TabsList className="w-full justify-start rounded-none bg-transparent p-0 border-0">
               <TabsTrigger
                 value="description"
                 className="
-                  relative rounded-none bg-transparent pb-3 pt-2 px-0 mr-8
+                  relative rounded-none bg-transparent pb-3 pt-2 px-0 mr-6
                   text-xs font-semibold text-slate-400
                   hover:text-slate-600
                   data-[state=active]:text-blue-700
@@ -586,7 +634,10 @@ export default function ProductDetail() {
                 Reviews
               </TabsTrigger>
             </TabsList>
+          </div>
 
+          {/* Roomy content area */}
+          <div className="max-w-4xl">
             {/* Description */}
             <TabsContent value="description" className="pt-6">
               <div>
@@ -837,9 +888,75 @@ export default function ProductDetail() {
                 </div>
               </div>
             </TabsContent>
-          </Tabs>
-        </div>
+          </div>
+        </Tabs>
       </div>
+
+      {/* -------------------- SIMILAR ITEMS -------------------- */}
+      {loadingSimilar && (
+        <div className="mt-20">
+          <div className="flex items-center justify-between mb-8">
+            <Skeleton className="h-7 w-64" />
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {[...Array(5)].map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {!loadingSimilar && similarProducts.length > 0 && (
+        <div className="mt-20">
+          <div className="mb-8">
+            <h2 className="text-xl font-bold text-slate-800">
+              Similar Items You Might Also Like
+            </h2>
+          </div>
+
+          <div className="relative group">
+            {/* Custom Navigation Buttons (Floating) */}
+            <button className="custom-prev-btn absolute left-0 top-1/2 z-50 flex h-9 w-9 sm:h-10 sm:w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-slate-800 shadow-2xl transition-all hover:bg-slate-50 active:scale-95 disabled:opacity-20">
+              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+            <button className="custom-next-btn absolute right-0 top-1/2 z-50 flex h-9 w-9 sm:h-10 sm:w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-slate-800 shadow-2xl transition-all hover:bg-slate-50 active:scale-95 disabled:opacity-20">
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              navigation={{
+                nextEl: ".custom-next-btn",
+                prevEl: ".custom-prev-btn",
+              }}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              spaceBetween={24}
+              slidesPerView={1}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                1024: { slidesPerView: 4 },
+                1280: { slidesPerView: 5 },
+              }}
+              className="pb-4"
+            >
+              {similarProducts.map((p) => (
+                <SwiperSlide key={p.id}>
+                  <ProductCard
+                    product={p}
+                    wished={wishlistIds.has(p.id)}
+                    onAddToCart={(prod) => dispatch(addToCart(prod))}
+                    onToggleWishlist={(prod) => dispatch(toggleWishlist(prod))}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

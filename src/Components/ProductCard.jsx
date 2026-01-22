@@ -25,8 +25,8 @@ export default function ProductCard({
   const fullStars = Math.round(avgRating);
 
   const subtitle = product.brand
-    ? `${product.brand} available`
-    : "5 types of shoes available";
+    ? product.brand
+    : "5 types of items available";
 
   return (
     <div

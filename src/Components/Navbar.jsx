@@ -53,7 +53,7 @@ const Navbar = () => {
         </Link>
 
         {/* ================= DESKTOP MIDDLE: LINKS (unchanged) ================= */}
-        <nav className="hidden md:flex items-center gap-10 text-[16px] text-slate-600">
+        <nav className="hidden md:flex items-center gap-10 text-[16px] text-[#1D364D]">
           <Link to="/category" className="hover:text-slate-900">
             Category
           </Link>
@@ -114,8 +114,8 @@ const Navbar = () => {
               className="h-10 w-10 rounded-full"
             />
             <div className="leading-tight">
-              <p className="text-[11px] text-slate-400">Good Morning!</p>
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-[11px] text-[#C0C3C6]">Good Morning!</p>
+              <p className="text-sm font-semibold text-[#1D364D]">
                 Scarlet Johnson
               </p>
             </div>
