@@ -1,4 +1,4 @@
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar"; // Adjusted import path
 import WishlistPage from "./pages/wishlist";
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
