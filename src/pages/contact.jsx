@@ -3,7 +3,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, Briefcase, Phone, MapPin, ArrowUpRight, CheckCircle2 } from "lucide-react";
+import {
+  Mail,
+  Briefcase,
+  Phone,
+  MapPin,
+  ArrowUpRight,
+  CheckCircle2,
+} from "lucide-react";
 
 // shadcn form + inputs
 import {
@@ -13,10 +20,10 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
-} from "@/Components/ui/form";
+} from "@/components/ui/form";
 
-import { Input } from "@/Components/ui/input";
-import { Textarea } from "@/Components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 import {
   Select,
@@ -24,7 +31,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/Components/ui/select";
+} from "@/components/ui/select";
 
 const schema = z.object({
   name: z.string().trim().min(2, "Name is required"),
@@ -62,7 +69,7 @@ export default function ContactUs() {
     setIsSubmitted(true);
     console.log("CONTACT FORM:", data);
     form.reset();
-    
+
     // Smoothly hide the success message after 5 seconds
     setTimeout(() => {
       setIsSubmitted(false);
@@ -381,7 +388,9 @@ function InfoBlock({ icon, title, subtitle, linkText, href, children }) {
       <div className="mt-0.5">{icon}</div>
 
       <div>
-        <div className="text-sm font-semibold text-slate-900 font-montserrat">{title}</div>
+        <div className="text-sm font-semibold text-slate-900 font-montserrat">
+          {title}
+        </div>
         <div className="mt-1 text-xs text-slate-500">{subtitle}</div>
 
         {linkText && href && (

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import ProductCard from "../Components/ProductCard";
+import ProductCard from "../components/ProductCard";
 import { toggleWishlist } from "../redux/wishlistSlice";
 import { useSelector } from "react-redux";
 import {
@@ -28,10 +28,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/Components/ui/tabs";
-import ProductDetailSkeleton from "@/Components/ProductDetailSkeleton";
-import ProductCardSkeleton from "../Components/ProductCardSkeleton";
-import { Skeleton } from "@/Components/ui/skeleton";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import ProductDetailSkeleton from "@/components/ProductDetailSkeleton";
+import ProductCardSkeleton from "../components/ProductCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -39,7 +39,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/Components/ui/breadcrumb";
+} from "@/components/ui/breadcrumb";
 
 export default function ProductDetail() {
   const wishlistItems = useSelector((state) => state.wishlist.items);

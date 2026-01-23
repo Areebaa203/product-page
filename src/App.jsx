@@ -1,4 +1,4 @@
-import Navbar from "./Components/Navbar";
+import Navbar from "./components/Navbar";
 import WishlistPage from "./pages/wishlist";
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -8,7 +8,7 @@ import Cart from "./pages/cart";
 import Faqs from "./pages/faqs";
 import { Brand } from "./pages/Brand";
 import ProductDetails from "./pages/ProductDetail";
-import Footer from "./Components/Footer";
+import Footer from "./components/Footer";
 import ContactUs from "./pages/contact";
 import CreateProduct from "./pages/CreateProduct";
 

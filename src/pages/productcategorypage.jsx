@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import ProductsGrid from "../Components/ProductsGrid";
+import ProductsGrid from "../components/ProductsGrid";
 import { ArrowLeft } from "lucide-react";
 
 export default function CategoryProductsPage() {

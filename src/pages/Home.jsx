@@ -1,7 +1,7 @@
 import { useState } from "react";
-import HeroBanner from "../Components/HeroBanner";
-import FilterRow from "../Components/FiltersRow";
-import ProductsGrid from "../Components/ProductsGrid";
+import HeroBanner from "../components/HeroBanner";
+import FilterRow from "../components/FiltersRow";
+import ProductsGrid from "../components/ProductsGrid";
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState("__all__");
