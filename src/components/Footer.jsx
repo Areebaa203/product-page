@@ -69,7 +69,7 @@ export default function Footer() {
                   }`}
                 />
                 {errors.email && (
-                  <p className="absolute -bottom-6 left-2 text-xs text-red-500">
+                  <p className="absolute -bottom-5 left-2 text-destructive text-[11px] font-medium leading-none">
                     {errors.email.message}
                   </p>
                 )}

@@ -189,7 +189,7 @@ export default function ContactUs() {
                             ].join(" ")}
                           />
                         </FormControl>
-                        <FormMessage className="mt-1 text-xs text-rose-600" />
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -215,7 +215,7 @@ export default function ContactUs() {
                             ].join(" ")}
                           />
                         </FormControl>
-                        <FormMessage className="mt-1 text-xs text-rose-600" />
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -274,7 +274,7 @@ export default function ContactUs() {
                           </FormControl>
                         </div>
 
-                        <FormMessage className="mt-1 text-xs text-rose-600" />
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -322,7 +322,7 @@ export default function ContactUs() {
                           </SelectContent>
                         </Select>
 
-                        <FormMessage className="mt-1 text-xs text-rose-600" />
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -351,7 +351,7 @@ export default function ContactUs() {
                           ].join(" ")}
                         />
                       </FormControl>
-                      <FormMessage className="mt-1 text-xs text-rose-600" />
+                      <FormMessage />
                     </FormItem>
                   )}
                 />

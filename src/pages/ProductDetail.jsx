@@ -17,6 +17,8 @@ import {
   Heart,
   ChevronLeft,
   MessageSquareMore,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/cartSlice"; // adjust path if needed
@@ -114,6 +116,32 @@ export default function ProductDetail() {
     setNewReviewRating(0);
     setNewReviewTitle("");
     setNewReviewComment("");
+  };
+
+  const handleEdit = () => {
+    navigate("/create-product", { state: { product } });
+  };
+
+  const handleDelete = () => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
+
+    try {
+      // 1. Update Local Storage
+      const localProducts = JSON.parse(
+        localStorage.getItem("userProducts") || "[]",
+      );
+      const updatedLocal = localProducts.filter(
+        (p) => String(p.id) !== String(product.id),
+      );
+      localStorage.setItem("userProducts", JSON.stringify(updatedLocal));
+
+      // 2. Redirect back
+      alert(`Product "${product.title}" deleted successfully.`);
+      navigate(-1);
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      alert("Something went wrong while deleting.");
+    }
   };
 
   useEffect(() => {
@@ -386,6 +414,22 @@ export default function ProductDetail() {
 
               <button className="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200">
                 <Share2 className="h-4 w-4" />
+              </button>
+
+              <button
+                onClick={handleEdit}
+                className="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-blue-600"
+                title="Edit Product"
+              >
+                <Pencil className="h-4 w-4" />
+              </button>
+
+              <button
+                onClick={handleDelete}
+                className="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-red-400 hover:bg-red-50 hover:text-red-600"
+                title="Delete Product"
+              >
+                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           </div>

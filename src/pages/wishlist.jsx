@@ -8,10 +8,28 @@ import {
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
+import ProductCard from "../components/ProductCard";
+
 const WishlistPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const items = useSelector(selectWishlistItems);
+
+  // For ProductCard's onDelete
+  const handleDeleteProduct = (productId) => {
+    try {
+      const localProducts = JSON.parse(
+        localStorage.getItem("userProducts") || "[]",
+      );
+      const updatedLocal = localProducts.filter((p) => p.id !== productId);
+      localStorage.setItem("userProducts", JSON.stringify(updatedLocal));
+      
+      // Also remove from wishlist if it was there
+      dispatch(removeFromWishlist(productId));
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-8">
@@ -57,34 +75,14 @@ const WishlistPage = () => {
       ) : (
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((p) => (
-            <div
+            <ProductCard
               key={p.id}
-              className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
-            >
-              <div className="aspect-square overflow-hidden rounded-xl bg-slate-50">
-                <img
-                  src={p.thumbnail}
-                  alt={p.title}
-                  className="h-full w-full object-contain"
-                />
-              </div>
-
-              <div className="mt-3">
-                <p className="line-clamp-2 font-semibold text-slate-900">
-                  {p.title}
-                </p>
-                <p className="mt-1 text-slate-700">${p.price}</p>
-
-                <div className="mt-4 flex gap-2">
-                  <button
-                    onClick={() => dispatch(removeFromWishlist(p.id))}
-                    className="flex-1 rounded-lg bg-red-500 px-3 py-2 text-sm font-semibold text-white hover:bg-red-600"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </div>
+              product={p}
+              wished={true}
+              onAddToCart={(prod) => dispatch(addToCart(prod))}
+              onToggleWishlist={(prod) => dispatch(removeFromWishlist(prod.id))}
+              onDelete={handleDeleteProduct}
+            />
           ))}
         </div>
       )}
