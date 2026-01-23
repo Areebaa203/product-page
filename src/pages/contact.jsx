@@ -381,7 +381,7 @@ function InfoBlock({ icon, title, subtitle, linkText, href, children }) {
       <div className="mt-0.5">{icon}</div>
 
       <div>
-        <div className="text-sm font-semibold text-slate-900">{title}</div>
+        <div className="text-sm font-semibold text-slate-900 font-montserrat">{title}</div>
         <div className="mt-1 text-xs text-slate-500">{subtitle}</div>
 
         {linkText && href && (

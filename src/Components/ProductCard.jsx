@@ -135,7 +135,7 @@ export default function ProductCard({
               const idx = i + 1;
               const filled = idx <= fullStars;
               return (
-                <span key={i} className="text-amber-500 text-sm">
+                <span key={i} className="text-[#E59819] text-sm">
                   {filled ? "★" : "☆"}
                 </span>
               );

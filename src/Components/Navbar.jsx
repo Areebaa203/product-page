@@ -44,80 +44,95 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* ================= LEFT: BRAND (always) ================= */}
-        <Link
-          to="/"
-          className="text-xl font-extrabold italic tracking-tight text-[#0D3356] font-inter"
-        >
-          FashionHub
-        </Link>
-
-        {/* ================= DESKTOP MIDDLE: LINKS (unchanged) ================= */}
-        <nav className="hidden md:flex items-center gap-10 text-[16px] text-[#1D364D]">
-          <Link to="/category" className="hover:text-slate-900">
-            Category
-          </Link>
-          <Link to="/brand" className="hover:text-slate-900">
-            Brand
-          </Link>
-          <Link to="/contact" className="hover:text-slate-900">
-            Contact
-          </Link>
-          <Link to="/faqs" className="hover:text-slate-900">
-            FAQ&apos;s
-          </Link>
-        </nav>
-
-        {/* ================= DESKTOP RIGHT: ACTIONS + PROFILE (unchanged) ================= */}
-        <div className="hidden md:flex items-center gap-4">
-          {/* Wishlist */}
-          <button
-            type="button"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200"
-            aria-label="Wishlist"
-            onClick={handleWishlist}
+        {/* ================= LEFT: BRAND + LINKS (grouped) ================= */}
+        <div className="flex items-center gap-10 lg:gap-15">
+          <Link
+            to="/"
+            className="text-2xl font-extrabold italic tracking-tighter text-[#0D3356] font-inter"
           >
-            <span className="text-lg">
-              <FontAwesomeIcon icon={faHeart} />
-            </span>
+            FashionHub
+          </Link>
 
-            {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-semibold text-white">
-                {wishlistCount}
+          {/* DESKTOP MIDDLE: LINKS */}
+          <nav className="hidden md:flex items-center gap-8 lg:gap-12 text-[15px] font-medium text-[#1D364D]">
+            <Link
+              to="/category"
+              className="hover:text-slate-900 transition-colors"
+            >
+              Category
+            </Link>
+            <Link
+              to="/brand"
+              className="hover:text-slate-900 transition-colors"
+            >
+              Brand
+            </Link>
+            <Link
+              to="/contact"
+              className="hover:text-slate-900 transition-colors"
+            >
+              Contact
+            </Link>
+            <Link to="/faqs" className="hover:text-slate-900 transition-colors">
+              FAQ&apos;s
+            </Link>
+          </nav>
+        </div>
+
+        {/* ================= DESKTOP RIGHT: ACTIONS + PROFILE ================= */}
+        <div className="hidden md:flex items-center gap-1">
+          <div className="flex items-center gap-2">
+            {/* Cart */}
+            <button
+              type="button"
+              className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#F5F1EE] hover:opacity-80 transition-all"
+              aria-label="Cart"
+              onClick={handleCart}
+            >
+              <span className="text-lg text-[#7C5A41]">
+                <FontAwesomeIcon icon={faBagShopping} />
               </span>
-            )}
-          </button>
 
-          {/* Cart */}
-          <button
-            type="button"
-            className="relative flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200"
-            aria-label="Cart"
-            onClick={handleCart}
-          >
-            <span className="text-lg">
-              <FontAwesomeIcon icon={faBagShopping} />
-            </span>
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#1D364D] text-[10px] font-bold text-white">
+                  {cartCount}
+                </span>
+              )}
+            </button>
 
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-slate-900 text-[10px] font-semibold text-white">
-                {cartCount}
+            {/* Wishlist/Notification (Now showing as heart but user mentioned wishlist) */}
+            <button
+              type="button"
+              className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[#EEEFF8] hover:opacity-80 transition-all"
+              aria-label="Wishlist"
+              onClick={handleWishlist}
+            >
+              <span className="text-lg text-[#3A4980]">
+                <FontAwesomeIcon icon={faHeart} />
               </span>
-            )}
-          </button>
+
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#FB7272] text-[10px] font-bold text-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+          </div>
 
           {/* Profile */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ml-1">
             <img
               src={profileimg}
               alt="Profile"
-              className="h-10 w-10 rounded-full"
+              className="h-10 w-10 rounded-full object-cover"
             />
-            <div className="leading-tight">
-              <p className="text-[11px] text-[#C0C3C6]">Good Morning!</p>
-              <p className="text-sm font-semibold text-[#1D364D]">
+            <div className="flex flex-col -space-y-0.5">
+              <span className="text-[11px] font-medium text-[#C0C3C6]">
+                Good Morning!
+              </span>
+              <span className="text-sm font-bold text-[#1D364D]">
                 Scarlet Johnson
-              </p>
+              </span>
             </div>
           </div>
         </div>

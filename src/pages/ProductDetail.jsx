@@ -1,5 +1,7 @@
 // src/pages/ProductDetail.jsx
 import React, { useEffect, useMemo, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import ProductCard from "../Components/ProductCard";
@@ -8,13 +10,11 @@ import { useSelector } from "react-redux";
 import {
   ArrowLeft,
   Truck,
-  Package,
   ChevronRight,
   Check,
   Share2,
   Bookmark,
   Heart,
-  ShoppingBag,
   ChevronLeft,
   MessageSquareMore,
 } from "lucide-react";
@@ -74,7 +74,7 @@ export default function ProductDetail() {
 
   const StarRow = ({ value = 0, onChange, size = "text-sm" }) => {
     return (
-      <div className={`flex items-center gap-0.5 ${size} text-amber-500`}>
+      <div className={`flex items-center gap-0.5 ${size} text-[#E59819]`}>
         {Array.from({ length: 5 }).map((_, i) => {
           const star = i + 1;
           const filled = star <= Math.round(value);
@@ -255,7 +255,8 @@ export default function ProductDetail() {
   const canNext = thumbIndex + 4 < thumbs.length;
 
   // -------------------- Static UI (like screenshot) --------------------
-  const colorOptions = ["#E5E7EB", "#A3E635", "#93C5FD", "#FBCFE8", "#D1D5DB"];
+  const colorOptions = ["#ECDECC", "#BBD278", "#BBC1F8", "#FFD3F8", "#E9B6A6"];
+
   const sizeOptions = ["Small", "Medium", "Large", "Extra Large", "XXL"];
 
   const likeCount = 109;
@@ -263,45 +264,42 @@ export default function ProductDetail() {
   return (
     <div className="max-w-[1440px] mx-auto px-6 sm:px-10 md:px-12 py-10">
       {/* Top row */}
-      <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 xl:gap-20">
+      <div className="grid lg:grid-cols-2 gap-12 xl:gap-24 items-start">
         {/* LEFT: Image + thumbs */}
         <div className="flex flex-col gap-4">
           <div className="rounded-2xl border border-slate-200 overflow-hidden bg-white">
             <img
               src={activeImg || product.thumbnail}
               alt={product.title}
-              className="h-[550px] w-full object-contain"
+              className="h-[300px] sm:h-[450px] lg:h-[600px] w-full object-contain"
             />
           </div>
 
           {/* thumbs row + arrows */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 mt-2">
             <button
               type="button"
               onClick={() => setThumbIndex((v) => Math.max(0, v - 1))}
               disabled={!canPrev}
               className={[
-                "grid h-10 w-10 place-items-center rounded-xl border bg-white transition",
-                canPrev
-                  ? "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  : "border-slate-100 text-slate-300 cursor-not-allowed",
+                "grid h-8 w-8 place-items-center text-slate-400 hover:text-slate-600 transition disabled:opacity-30",
               ].join(" ")}
               aria-label="Previous"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-5 w-5" />
             </button>
 
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               {visibleThumbs.map((img) => (
                 <button
                   key={img}
                   type="button"
                   onClick={() => setActiveImg(img)}
                   className={[
-                    "h-16 w-16 rounded-xl overflow-hidden border bg-white",
+                    "h-20 w-20 rounded-xl overflow-hidden border-2 transition-all",
                     img === activeImg
-                      ? "border-blue-600"
-                      : "border-slate-200 hover:border-slate-300",
+                      ? "border-[#3A4980]"
+                      : "border-[#E4E4E4] hover:border-slate-300 bg-white",
                   ].join(" ")}
                 >
                   <img
@@ -320,44 +318,47 @@ export default function ProductDetail() {
               }
               disabled={!canNext}
               className={[
-                "grid h-10 w-10 place-items-center rounded-xl border bg-white transition",
-                canNext
-                  ? "border-slate-200 text-slate-600 hover:bg-slate-50"
-                  : "border-slate-100 text-slate-300 cursor-not-allowed",
+                "grid h-8 w-8 place-items-center text-slate-400 hover:text-slate-600 transition disabled:opacity-30",
               ].join(" ")}
               aria-label="Next"
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-5 w-5" />
             </button>
           </div>
         </div>
 
         {/* RIGHT: Product Info */}
-        <div className="flex flex-col justify-between py-2">
+        <div className="flex flex-col gap-0">
           {/* Breadcrumbs */}
-          <div className="mb-6 w-fit rounded-lg bg-[#EDF0F8] px-3 py-1.5">
+          <div className="mb-4 w-fit rounded-lg bg-[#EDF0F8] px-3 py-1.5">
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="text-[11px] font-medium text-slate-500">
-                  <BreadcrumbLink asChild>
+                <BreadcrumbItem className="text-[11px] font-medium text-[#A3A9C2] transition-colors">
+                  <BreadcrumbLink
+                    asChild
+                    className="text-[#A3A9C2] hover:text-[#3A4980]"
+                  >
                     <Link to="/">Home</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
 
-                <BreadcrumbSeparator className="text-slate-300" />
+                <BreadcrumbSeparator className="text-[#A3A9C2]/50" />
 
-                <BreadcrumbItem className="text-[11px] font-medium text-slate-500">
-                  <BreadcrumbLink asChild>
+                <BreadcrumbItem className="text-[11px] font-medium text-[#A3A9C2] hover:text-[#3A4980] transition-colors">
+                  <BreadcrumbLink
+                    asChild
+                    className="text-[#A3A9C2] hover:text-[#3A4980]"
+                  >
                     <Link to={`/category/${product.category}`}>
                       {product.category}
                     </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
 
-                <BreadcrumbSeparator className="text-slate-300" />
+                <BreadcrumbSeparator className="text-[#A3A9C2]" />
 
                 <BreadcrumbItem className="text-[11px] font-bold text-[#3A4980]">
-                  <BreadcrumbPage className="cursor-pointer">
+                  <BreadcrumbPage className="cursor-default text-[#3A4980] max-w-[120px] sm:max-w-none truncate">
                     {product.title}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
@@ -366,12 +367,12 @@ export default function ProductDetail() {
           </div>
 
           {/* Title + icons */}
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start justify-between gap-4 mt-1">
             <div>
-              <h1 className="text-xl font-bold text-slate-900">
+              <h4 className="text-[28px] font-semibold text-[#000000]">
                 {product.title}
-              </h1>
-              <p className="mt-1 text-xs text-slate-400">{product.brand}</p>
+              </h4>
+              <p className="text-[16px] text-[#B9BBBF]">{product.brand}</p>
             </div>
 
             <div className="flex items-center gap-2">
@@ -388,21 +389,21 @@ export default function ProductDetail() {
               </button>
             </div>
           </div>
-          <div className="my-5 h-px bg-slate-200"></div>
+          <div className="my-4 h-px bg-[#E4E4E4]"></div>
           {/* Price + badges row */}
-          <div className="mt-5 flex items-start gap-4">
+          <div className="mt-3 flex w-full flex-wrap items-center gap-4 sm:gap-8">
             {/* Left: Price Stack */}
-            <div className="flex flex-col">
-              <div className="text-2xl font-extrabold text-slate-900">
+            <div className="flex flex-col leading-none">
+              <div className="text-[34px] font-bold text-[#3A4980]">
                 ${Number(product.price).toFixed(2)}
               </div>
-              <div className="text-sm font-semibold text-slate-300 line-through">
-                ${Number(product.price).toFixed(2)}
+              <div className="mt-2 text-[21px] text-black/50 line-through font-normal">
+                ${Number(product.compare_at_price ?? product.price).toFixed(2)}
               </div>
             </div>
 
             {/* Right: Rating Stack */}
-            <div className="flex flex-col gap-1.5 mt-1">
+            <div className="flex flex-col items-start gap-1.5">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -412,7 +413,7 @@ export default function ProductDetail() {
                       .getElementById("reviews-section")
                       ?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="inline-flex items-center gap-1 rounded-full bg-[#FBF3EA] px-2 py-1 text-xs font-bold text-[#D48D3B] border border-amber-100 hover:bg-amber-50 transition"
+                  className="inline-flex items-center gap-1 rounded-full bg-[#F9FAFB] px-3 py-2 text-sm font-bold text-[#E59819] border border-slate-200 hover:bg-slate-50 transition"
                 >
                   ★ {Number(displayRating || 0).toFixed(1)}
                 </button>
@@ -425,14 +426,14 @@ export default function ProductDetail() {
                       .getElementById("reviews-section")
                       ?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="inline-flex items-center gap-1 rounded-full bg-[#EDF0F8] px-2.5 py-1 text-xs font-semibold text-[#3A4980] border border-slate-200 hover:bg-blue-100 transition"
+                  className="inline-flex items-center gap-1 rounded-full bg-[#EDF0F8] px-3 py-2 text-sm font-semibold text-[#3A4980] border border-slate-200 hover:bg-blue-100 transition"
                 >
-                  <MessageSquareMore className="h-3.5 w-3.5" />
+                  <MessageSquareMore className="h-4 w-4" />
                   {totalReviews || 67} Reviews
                 </button>
               </div>
 
-              <div className="text-[11px] font-semibold">
+              <div className="text-[14px]">
                 <span className="text-[#3E9242]">93%</span>{" "}
                 <span className="text-[#B9BBBF]">
                   of buyers have recommended this.
@@ -441,19 +442,21 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          <div className="my-5 h-px bg-slate-200" />
+          <div className="my-4 h-px bg-[#E4E4E4]" />
 
           {/* Choose color */}
           <div>
-            <div className="text-xs text-slate-500 mb-3">Choose a Color</div>
-            <div className="flex items-center gap-3">
+            <div className="text-[16px] text-[#B9BBBF] mb-3 font-medium">
+              Choose a Color
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
               {colorOptions.map((c, i) => (
                 <button
                   key={c}
                   type="button"
                   onClick={() => setSelectedColor(i)}
                   className={[
-                    "grid h-9 w-9 place-items-center rounded-full border transition",
+                    "grid h-12 w-12 place-items-center rounded-full border transition",
                     selectedColor === i
                       ? "border-slate-200 ring-2 ring-slate-200 ring-offset-2"
                       : "border-transparent hover:border-slate-200",
@@ -467,14 +470,15 @@ export default function ProductDetail() {
                 </button>
               ))}
             </div>
+            <div className="my-4 h-px bg-[#E4E4E4]" />
           </div>
-
-          <div className="my-5 h-px bg-slate-200" />
 
           {/* Choose size */}
           <div>
-            <div className="text-xs text-slate-500 mb-3">Choose a Size</div>
-            <div className="flex flex-wrap gap-3">
+            <div className="text-[16px] text-[#B9BBBF] mb-3 font-medium">
+              Choose a Size
+            </div>
+            <div className="flex flex-wrap gap-2">
               {sizeOptions.map((s) => {
                 const active = selectedSize === s;
                 return (
@@ -485,8 +489,8 @@ export default function ProductDetail() {
                     className={[
                       "inline-flex items-center gap-2.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all",
                       active
-                        ? "bg-[#EDF0F8] text-[#3A4980] border-transparent"
-                        : "bg-[#F3F3F3] text-slate-500 hover:bg-slate-200 border-transparent",
+                        ? "bg-[#EDF0F8] text-[#7e7777] border-transparent"
+                        : "bg-[#F3F3F3] text-[#726C6C] hover:bg-slate-200 border-transparent",
                     ].join(" ")}
                   >
                     <span
@@ -506,7 +510,7 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          <div className="my-6 h-px bg-slate-200" />
+          <div className="my-5 h-px bg-[#E4E4E4]" />
 
           {/* Qty + Add to cart row */}
           <div className="flex items-center gap-4">
@@ -543,44 +547,47 @@ export default function ProductDetail() {
                   ).toFixed(2)}`,
                 );
               }}
-              className="flex-1 h-11 rounded-full bg-[#3b4a74] text-white text-xs font-bold shadow-sm hover:bg-[#2d3a5e] inline-flex items-center justify-center gap-2"
+              className="h-11 w-full max-w-[320px] rounded-full bg-[#3A4980] text-[#ffffff] text-xs font-bold shadow-sm hover:bg-[#354570] inline-flex items-center justify-center gap-2 transition-all active:scale-95"
             >
-              <ShoppingBag className="h-4 w-4" />
+              <FontAwesomeIcon icon={faBagShopping} className="text-sm" />
               Add To Cart
             </button>
           </div>
 
           {/* Delivery / Return */}
-          <div className="mt-5 rounded-xl border border-slate-200 overflow-hidden">
-            <div className="flex items-start gap-3 p-4">
-              <div className="grid h-8 w-8 place-items-center rounded-lg bg-rose-50">
-                <Truck className="h-4 w-4 text-rose-500" />
+          <div className="mt-7 rounded-2xl border border-[#E4E4E4] overflow-hidden">
+            <div className="flex items-start gap-4 p-3">
+              <div className="mt-1">
+                <Truck className="h-5 w-5 text-[#D75951]" />
               </div>
               <div className="flex-1">
-                <div className="text-xs font-semibold text-slate-900">
+                <div className="text-[15px] font-bold text-[#1D364D]">
                   Free Delivery
                 </div>
-                <div className="mt-1 text-[11px] text-slate-500">
+                <div className="mt-1 text-[13px] text-[#726C6C] hover:underline cursor-pointer">
                   Enter your Postal code for Delivery Availability
                 </div>
               </div>
             </div>
 
-            <div className="h-px bg-slate-200" />
+            <div className="mx-5 h-px bg-[#E4E4E4]" />
 
-            <div className="flex items-start gap-3 p-4">
-              <div className="grid h-8 w-8 place-items-center rounded-lg bg-rose-50">
-                <Package className="h-4 w-4 text-rose-500" />
+            <div className="flex items-start gap-4 p-3">
+              <div className="mt-1">
+                <FontAwesomeIcon
+                  icon={faBagShopping}
+                  className="h-5 w-5 text-[#D75951]"
+                />
               </div>
               <div className="flex-1">
-                <div className="text-xs font-semibold text-slate-900">
+                <div className="text-[15px] font-bold text-[#1D364D] cursor-pointer">
                   Return Delivery
                 </div>
-                <div className="mt-1 text-[11px] text-slate-500">
+                <div className="mt-1 text-[13px] text-[#726C6C] cursor-pointer">
                   Free 30 days Delivery Return.{" "}
                   <button
                     type="button"
-                    className="font-semibold text-slate-600 hover:text-slate-900"
+                    className="hover:underline"
                     onClick={() => alert("Return policy details")}
                   >
                     Details
@@ -593,24 +600,23 @@ export default function ProductDetail() {
       </div>
 
       {/* -------------------- TABS (FIX WIDTH + EXACT REVIEWS UI) -------------------- */}
-      <div className="mt-10" id="reviews-section">
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          {/* Narrow navigation area */}
-          <div className="max-w-xs border-b border-slate-200">
-            <TabsList className="w-full justify-start rounded-none bg-transparent p-0 border-0">
+      <div className="mt-20 w-full" id="reviews-section">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          {/* Gray line wrapper - ensures it spans the full horizontal space of the container */}
+          <div className="relative w-full border-b-[2px] border-[#E4E4E4]">
+            <TabsList className="justify-start rounded-none bg-transparent p-0 border-0 h-auto relative flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
               <TabsTrigger
                 value="description"
                 className="
-                  relative rounded-none bg-transparent pb-3 pt-2 px-0 mr-6
-                  text-xs font-semibold text-slate-400
-                  hover:text-slate-600
-                  data-[state=active]:text-blue-700
-                  data-[state=active]:after:absolute
-                  data-[state=active]:after:left-0
-                  data-[state=active]:after:bottom-[-1px]
-                  data-[state=active]:after:h-[2px]
-                  data-[state=active]:after:w-full
-                  data-[state=active]:after:bg-blue-700
+                  relative rounded-none bg-transparent pb-4 pt-2 px-0 mr-12
+                  text-[17px] font-medium text-[#B9BBBF]
+                  hover:bg-transparent
+                  focus-visible:ring-0 focus-visible:ring-offset-0
+                  transition-none
+                  data-[state=active]:text-[#164C96]
+                  data-[state=active]:font-bold
+                  data-[state=active]:bg-transparent
+                  data-[state=active]:shadow-none
                 "
               >
                 Description
@@ -619,25 +625,33 @@ export default function ProductDetail() {
               <TabsTrigger
                 value="reviews"
                 className="
-                  relative rounded-none bg-transparent pb-3 pt-2 px-0
-                  text-xs font-semibold text-slate-400
-                  hover:text-slate-600
-                  data-[state=active]:text-blue-700
-                  data-[state=active]:after:absolute
-                  data-[state=active]:after:left-0
-                  data-[state=active]:after:bottom-[-1px]
-                  data-[state=active]:after:h-[2px]
-                  data-[state=active]:after:w-full
-                  data-[state=active]:after:bg-blue-700
+                  relative rounded-none bg-transparent pb-4 pt-2 px-0
+                  text-[17px] font-medium text-[#B9BBBF]
+                  hover:bg-transparent
+                  focus-visible:ring-0 focus-visible:ring-offset-0
+                  transition-none
+                  data-[state=active]:text-[#164C96]
+                  data-[state=active]:font-bold
+                  data-[state=active]:bg-transparent
+                  data-[state=active]:shadow-none
                 "
               >
                 Reviews
               </TabsTrigger>
+
+              {/* Precise sliding underline - widths and positions based on standard 17px font */}
+              <div
+                className="absolute bottom-[-2px] h-[3px] bg-[#164C96] transition-all duration-700 ease-in-out rounded-full"
+                style={{
+                  left:
+                    activeTab === "description" ? "0px" : "calc(93px + 48px)",
+                  width: activeTab === "description" ? "93px" : "65px",
+                }}
+              />
             </TabsList>
           </div>
 
-          {/* Roomy content area */}
-          <div className="max-w-4xl">
+          <div className="w-full">
             {/* Description */}
             <TabsContent value="description" className="pt-6">
               <div>
@@ -666,7 +680,7 @@ export default function ProductDetail() {
                         key={i}
                         className="flex items-start gap-3 text-xs text-slate-600"
                       >
-                        <span className="mt-0.5 grid h-4 w-4 place-items-center rounded-full bg-blue-100 text-blue-600 shrink-0">
+                        <span className="mt-0.5 grid h-4 w-4 place-items-center rounded-full bg-[#E7F4FC] text-[#164C96] shrink-0">
                           <Check className="h-2.5 w-2.5" />
                         </span>
                         {item}
@@ -688,7 +702,7 @@ export default function ProductDetail() {
                         key={i}
                         className="flex items-start gap-3 text-xs text-slate-600"
                       >
-                        <span className="mt-0.5 grid h-4 w-4 place-items-center rounded-full bg-blue-100 text-blue-600 shrink-0">
+                        <span className="mt-0.5 grid h-4 w-4 place-items-center rounded-full bg-[#E7F4FC] text-[#164C96] shrink-0">
                           <Check className="h-2.5 w-2.5" />
                         </span>
                         {item}
@@ -700,41 +714,52 @@ export default function ProductDetail() {
             </TabsContent>
 
             {/* Reviews */}
-            <TabsContent value="reviews" className="pt-6">
+            <TabsContent value="reviews" className="pt-8">
               <div>
-                <h3 className="text-xs font-semibold text-slate-900">
+                <h3 className="text-[20px] font-bold text-[#1D364D] mb-6">
                   Customers Feedback
                 </h3>
 
-                {/* Rating card + distribution */}
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-[180px_1fr] gap-6 items-start">
-                  <div className="rounded-lg bg-slate-50 border border-slate-100 p-5">
-                    <div className="text-3xl font-extrabold text-blue-700 leading-none">
+                <div className="mt-8 flex flex-col lg:flex-row gap-2 items-stretch">
+                  {/* Left: Product Rating Score - Spanning till 'Feedback' title end on desktop (~240px) */}
+                  <div className="w-full lg:w-[240px] flex flex-col items-center justify-center bg-[#F9FAFB] rounded-2xl p-8 border border-[#E4E4E4] min-h-[200px] lg:min-h-[224px]">
+                    <div className="text-[64px] font-bold text-[#164C96] leading-none mb-3">
                       {Number(displayRating || 0).toFixed(1)}
                     </div>
-                    <div className="mt-2">
-                      <StarRow value={displayRating} size="text-sm" />
+                    <div className="mb-3">
+                      <StarRow value={displayRating} size="text-2xl" />
                     </div>
-                    <div className="mt-2 text-[11px] text-slate-500">
+                    <div className="text-[15px] font-semibold text-[#1D364D]">
                       Product Rating
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  {/* Right: Detailed Progress Bars - Spanning till '30 days' text on desktop (~520px more) */}
+                  <div className="w-full lg:w-[520px] bg-[#F9FAFB] rounded-2xl p-7 border border-[#E4E4E4] flex flex-col justify-center space-y-4">
                     {[5, 4, 3, 2, 1].map((s) => (
-                      <div key={s} className="flex items-center gap-3">
-                        <div className="flex-1 h-[3px] bg-slate-200 rounded-full overflow-hidden">
+                      <div
+                        key={s}
+                        className="grid grid-cols-[1fr_80px_45px] items-center gap-4"
+                      >
+                        <div className="h-[5px] bg-[#E4E4E4] rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-emerald-700 rounded-full"
+                            className="h-full bg-[#20590C] rounded-full"
                             style={{ width: `${percentFor(s)}%` }}
                           />
                         </div>
-
-                        <div className="w-20 flex justify-start">
-                          <StarRow value={s} size="text-[11px]" />
+                        <div className="flex items-center gap-0.5 whitespace-nowrap justify-center">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <span
+                              key={i}
+                              className={`text-[12px] ${
+                                i + 1 <= s ? "text-[#E59819]" : "text-slate-200"
+                              }`}
+                            >
+                              ★
+                            </span>
+                          ))}
                         </div>
-
-                        <div className="w-10 text-right text-[11px] font-semibold text-slate-500">
+                        <div className="text-right text-[14px] font-bold text-[#164C96]">
                           {percentFor(s)}%
                         </div>
                       </div>
@@ -774,7 +799,7 @@ export default function ProductDetail() {
                             className="border-b border-slate-100 pb-6"
                           >
                             <div className="flex gap-3">
-                              <div className="h-9 w-9 rounded-full bg-blue-700 text-white flex items-center justify-center text-[11px] font-bold">
+                              <div className="h-9 w-9 rounded-full bg-[#164C96] text-white flex items-center justify-center text-[11px] font-bold">
                                 {initials || "U"}
                               </div>
 
@@ -860,7 +885,7 @@ export default function ProductDetail() {
                         value={newReviewTitle}
                         onChange={(e) => setNewReviewTitle(e.target.value)}
                         placeholder="Great Products"
-                        className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-200"
+                        className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-[#164C96]/20"
                       />
                     </div>
 
@@ -873,14 +898,14 @@ export default function ProductDetail() {
                         onChange={(e) => setNewReviewComment(e.target.value)}
                         rows={5}
                         placeholder="It is a long established fact that a reader will be distracted by the readable content..."
-                        className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-200"
+                        className="mt-2 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-[#164C96]/20"
                       />
                     </div>
 
                     <button
                       type="button"
                       onClick={handleSubmitReview}
-                      className="mt-2 inline-flex items-center justify-center rounded-full bg-[#3b4a74] px-6 py-2.5 text-[11px] font-bold text-white hover:bg-[#2d3a5e]"
+                      className="mt-2 inline-flex items-center justify-center rounded-full bg-[#164C96] px-6 py-2.5 text-[11px] font-bold text-white hover:bg-[#123c75]"
                     >
                       Submit Review
                     </button>
