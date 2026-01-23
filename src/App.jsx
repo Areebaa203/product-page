@@ -7,10 +7,10 @@ import Cart from "./pages/cart";
 import Faqs from "./pages/faqs";
 import { Brand } from "./pages/Brand";
 import ProductDetails from "./pages/ProductDetail";
-import Footer from "./components/Footer";
 import ContactUs from "./pages/contact";
 import CreateProduct from "./pages/CreateProduct";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export default function App() {
   return (
