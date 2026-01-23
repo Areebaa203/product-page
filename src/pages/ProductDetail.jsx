@@ -723,7 +723,7 @@ export default function ProductDetail() {
                 <div className="mt-8 flex flex-col lg:flex-row gap-2 items-stretch">
                   {/* Left: Product Rating Score - Spanning till 'Feedback' title end on desktop (~240px) */}
                   <div className="w-full lg:w-[240px] flex flex-col items-center justify-center bg-[#F9FAFB] rounded-2xl p-8 border border-[#E4E4E4] min-h-[200px] lg:min-h-[224px]">
-                    <div className="text-[64px] font-bold text-[#164C96] leading-none mb-3">
+                    <div className="text-[60px] font-bold text-[#164C96] leading-none mb-3">
                       {Number(displayRating || 0).toFixed(1)}
                     </div>
                     <div className="mb-3">

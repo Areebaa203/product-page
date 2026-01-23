@@ -4,15 +4,14 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/Components/ui/accordion";
+} from "@/components/ui/accordion";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-
+} from "@/components/ui/Select";
 export default function FaqPage() {
   const categories = useMemo(
     () => [
