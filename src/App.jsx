@@ -1,4 +1,3 @@
-import Navbar from "./components/Navbar"; // Adjusted import path
 import WishlistPage from "./pages/wishlist";
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -11,6 +10,7 @@ import ProductDetails from "./pages/ProductDetail";
 import Footer from "./components/Footer";
 import ContactUs from "./pages/contact";
 import CreateProduct from "./pages/CreateProduct";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
