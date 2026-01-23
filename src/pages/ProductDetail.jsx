@@ -17,8 +17,6 @@ import {
   Heart,
   ChevronLeft,
   MessageSquareMore,
-  Pencil,
-  Trash2,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/cartSlice"; // adjust path if needed
@@ -53,7 +51,7 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [qty, setQty] = useState(5);
+  const [qty, setQty] = useState(1);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [similarProducts, setSimilarProducts] = useState([]);
@@ -69,7 +67,7 @@ export default function ProductDetail() {
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
 
-  // --- Review Form (exact like screenshot) ---
+  // --- Review Form ---
   const [newReviewRating, setNewReviewRating] = useState(0);
   const [newReviewTitle, setNewReviewTitle] = useState("");
   const [newReviewComment, setNewReviewComment] = useState("");
@@ -118,34 +116,8 @@ export default function ProductDetail() {
     setNewReviewComment("");
   };
 
-  const handleEdit = () => {
-    navigate("/create-product", { state: { product } });
-  };
-
-  const handleDelete = () => {
-    if (!confirm("Are you sure you want to delete this product?")) return;
-
-    try {
-      // 1. Update Local Storage
-      const localProducts = JSON.parse(
-        localStorage.getItem("userProducts") || "[]",
-      );
-      const updatedLocal = localProducts.filter(
-        (p) => String(p.id) !== String(product.id),
-      );
-      localStorage.setItem("userProducts", JSON.stringify(updatedLocal));
-
-      // 2. Redirect back
-      alert(`Product "${product.title}" deleted successfully.`);
-      navigate(-1);
-    } catch (error) {
-      console.error("Failed to delete product:", error);
-      alert("Something went wrong while deleting.");
-    }
-  };
-
   useEffect(() => {
-    setQty(5);
+    setQty(1);
     setSelectedColor(0);
     setSelectedSize("Small");
     setNewReviewRating(0);
@@ -282,7 +254,7 @@ export default function ProductDetail() {
   const canPrev = thumbIndex > 0;
   const canNext = thumbIndex + 4 < thumbs.length;
 
-  // -------------------- Static UI (like screenshot) --------------------
+  // -------------------- Static UI --------------------
   const colorOptions = ["#ECDECC", "#BBD278", "#BBC1F8", "#FFD3F8", "#E9B6A6"];
 
   const sizeOptions = ["Small", "Medium", "Large", "Extra Large", "XXL"];
@@ -414,22 +386,6 @@ export default function ProductDetail() {
 
               <button className="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200">
                 <Share2 className="h-4 w-4" />
-              </button>
-
-              <button
-                onClick={handleEdit}
-                className="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-blue-600"
-                title="Edit Product"
-              >
-                <Pencil className="h-4 w-4" />
-              </button>
-
-              <button
-                onClick={handleDelete}
-                className="grid h-8 w-8 place-items-center rounded-full bg-slate-100 text-red-400 hover:bg-red-50 hover:text-red-600"
-                title="Delete Product"
-              >
-                <Trash2 className="h-4 w-4" />
               </button>
             </div>
           </div>
@@ -646,13 +602,13 @@ export default function ProductDetail() {
       {/* -------------------- TABS (FIX WIDTH + EXACT REVIEWS UI) -------------------- */}
       <div className="mt-20 w-full" id="reviews-section">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          {/* Gray line wrapper - ensures it spans the full horizontal space of the container */}
-          <div className="relative w-full border-b-[2px] border-[#E4E4E4]">
+          {/* Line wrapper */}
+          <div className="relative w-full">
             <TabsList className="justify-start rounded-none bg-transparent p-0 border-0 h-auto relative flex-nowrap overflow-x-auto overflow-y-hidden scrollbar-hide">
               <TabsTrigger
                 value="description"
                 className="
-                  relative rounded-none bg-transparent pb-4 pt-2 px-0 mr-12
+                  relative rounded-none bg-transparent pb-4 pt-2 px-0 mr-10
                   text-[17px] font-medium text-[#B9BBBF]
                   hover:bg-transparent
                   focus-visible:ring-0 focus-visible:ring-offset-0
@@ -682,17 +638,20 @@ export default function ProductDetail() {
               >
                 Reviews
               </TabsTrigger>
-
-              {/* Precise sliding underline - widths and positions based on standard 17px font */}
-              <div
-                className="absolute bottom-[-2px] h-[3px] bg-[#164C96] transition-all duration-700 ease-in-out rounded-full"
-                style={{
-                  left:
-                    activeTab === "description" ? "0px" : "calc(93px + 48px)",
-                  width: activeTab === "description" ? "93px" : "65px",
-                }}
-              />
             </TabsList>
+
+            {/* Gray Baseline - Full Width */}
+            <div className="absolute bottom-0 left-0 right-0 h-[4px] bg-[#E4E4E4]" />
+
+            {/* Blue Active Indicator */}
+            <div
+              className="absolute bottom-0 h-[4px] bg-[#164C96] transition-all duration-300 ease-in-out z-10"
+              style={{
+                left:
+                  activeTab === "description" ? "0px" : "calc(93px + 40px)",
+                width: activeTab === "description" ? "93px" : "68px",
+              }}
+            />
           </div>
 
           <div className="w-full">

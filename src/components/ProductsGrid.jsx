@@ -25,7 +25,7 @@ const ProductsGrid = ({ category }) => {
   // fast lookup: ids Set
   const wishlistIds = useMemo(
     () => new Set(wishlistItems.map((i) => i.id)),
-    [wishlistItems]
+    [wishlistItems],
   );
 
   const [products, setProducts] = useState([]);
@@ -38,7 +38,7 @@ const ProductsGrid = ({ category }) => {
   const skip = useMemo(() => (page - 1) * limit, [page]);
   const totalPages = useMemo(
     () => Math.ceil(total / limit) || 1,
-    [total, limit]
+    [total, limit],
   );
 
   // reset to page 1 when category changes
@@ -58,18 +58,21 @@ const ProductsGrid = ({ category }) => {
             : `https://dummyjson.com/products/category/${category}`;
 
         const res = await axios.get(url, { params: { limit, skip } });
-        
+
         // Merge Local Products
-        const localProducts = JSON.parse(localStorage.getItem("userProducts") || "[]");
+        const localProducts = JSON.parse(
+          localStorage.getItem("userProducts") || "[]",
+        );
         // Filter by category if selected
-        const visibleLocalProducts = localProducts.filter(p => 
-            !category || category === "__all__" || p.category === category
+        const visibleLocalProducts = localProducts.filter(
+          (p) => !category || category === "__all__" || p.category === category,
         );
 
         // Prepend local products only on the first page
-        const combinedProducts = page === 1 
-            ? [...visibleLocalProducts, ...(res.data.products || [])] 
-            : (res.data.products || []);
+        const combinedProducts =
+          page === 1
+            ? [...visibleLocalProducts, ...(res.data.products || [])]
+            : res.data.products || [];
 
         setProducts(combinedProducts);
         setTotal((res.data.total ?? 0) + visibleLocalProducts.length);
@@ -101,7 +104,7 @@ const ProductsGrid = ({ category }) => {
 
       const res = await axios.post(
         "https://dummyjson.com/products/add",
-        payload
+        payload,
       );
 
       // update UI list: add at top
@@ -119,7 +122,7 @@ const ProductsGrid = ({ category }) => {
     try {
       // 1. Update Local Storage
       const localProducts = JSON.parse(
-        localStorage.getItem("userProducts") || "[]"
+        localStorage.getItem("userProducts") || "[]",
       );
       const updatedLocal = localProducts.filter((p) => p.id !== productId);
       localStorage.setItem("userProducts", JSON.stringify(updatedLocal));

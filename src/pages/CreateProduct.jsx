@@ -21,12 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChevronLeft } from "lucide-react";
 import axios from "axios";
 
@@ -37,7 +32,7 @@ const productSchema = z.object({
   }),
   price: z.preprocess(
     (a) => parseInt(z.string().parse(a), 10),
-    z.number().positive({ message: "Price must be a positive number." })
+    z.number().positive({ message: "Price must be a positive number." }),
   ),
   description: z.string().min(10, {
     message: "Description must be at least 10 characters.",
@@ -71,47 +66,65 @@ const CreateProduct = () => {
     if (isEditMode && productToEdit) {
       form.reset({
         title: productToEdit.title,
-        price: productToEdit.price,
+        price: String(productToEdit.price), // Convert number to string for the input field
         description: productToEdit.description,
         category: productToEdit.category,
         thumbnail: productToEdit.thumbnail,
       });
     }
-  }, [isEditMode, productToEdit, form]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditMode, productToEdit]); // Removed 'form' to prevent resetting while user is typing
 
   const onSubmit = async (values) => {
     console.log("Form Submitted:", values);
     try {
-  // 1. Edit Mode: Update in localStorage if it exists there
+      // 1. Edit Mode: Update in localStorage if it exists there
       if (isEditMode) {
-         // Try to find and update in local storage first
-         const localProducts = JSON.parse(localStorage.getItem("userProducts") || "[]");
-         const index = localProducts.findIndex(p => p.id === productToEdit.id);
-         
-         if (index !== -1) {
-             const updatedProduct = { ...localProducts[index], ...values };
-             localProducts[index] = updatedProduct;
-             localStorage.setItem("userProducts", JSON.stringify(localProducts));
-             console.log("Updated locally:", updatedProduct);
-         } else {
-             // Fallback for API products (simulated)
-             await axios.put(`https://dummyjson.com/products/${productToEdit.id}`, values);
-         }
-         alert(`Product "${values.title}" updated successfully!`);
+        // Try to find and update in local storage first
+        const localProducts = JSON.parse(
+          localStorage.getItem("userProducts") || "[]",
+        );
+        const index = localProducts.findIndex((p) => p.id === productToEdit.id);
+
+        if (index !== -1) {
+          // Product exists in localStorage - update it
+          const updatedProduct = { ...localProducts[index], ...values };
+          localProducts[index] = updatedProduct;
+          localStorage.setItem("userProducts", JSON.stringify(localProducts));
+          console.log("Updated locally:", updatedProduct);
+        } else {
+          // Product is from API - add it to localStorage with updates
+          const updatedProduct = { 
+            ...productToEdit, 
+            ...values,
+            price: Number(values.price) // Ensure price is a number
+          };
+          localProducts.unshift(updatedProduct);
+          localStorage.setItem("userProducts", JSON.stringify(localProducts));
+          console.log("API product saved to localStorage:", updatedProduct);
+        }
+        alert(`Product "${values.title}" updated successfully!`);
       } else {
         // 2. Add Mode: Create and save to localStorage
-        const res = await axios.post("https://dummyjson.com/products/add", values);
-        
+        const res = await axios.post(
+          "https://dummyjson.com/products/add",
+          values,
+        );
+
         // Enhance with local flag and ensure ID is unique (using timestamp) if API id collides or just use what api gives + random
         // DummyJSON always returns same ID 195 for add... so we need a unique ID for local list
-        const newProduct = { 
-            ...values, 
-            id: Date.now(), // Unique ID for local
-            thumbnail: values.thumbnail || "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
-            isUserCreated: true 
+        const newProduct = {
+          ...values,
+          id: Date.now(), // Unique ID for local
+          thumbnail:
+            values.thumbnail ||
+            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg",
+          isUserCreated: true,
         };
 
-        const localProducts = JSON.parse(localStorage.getItem("userProducts") || "[]");
+        const localProducts = JSON.parse(
+          localStorage.getItem("userProducts") || "[]",
+        );
         localProducts.unshift(newProduct);
         localStorage.setItem("userProducts", JSON.stringify(localProducts));
 
@@ -145,29 +158,120 @@ const CreateProduct = () => {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Product Name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <FormField
                 control={form.control}
-                name="price"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price</FormLabel>
+                    <FormLabel>Title</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="99.99" {...field} />
+                      <Input placeholder="Product Name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <Input type="number" placeholder="99.99" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="beauty">Beauty</SelectItem>
+                          <SelectItem value="fragrances">Fragrances</SelectItem>
+                          <SelectItem value="furniture">Furniture</SelectItem>
+                          <SelectItem value="groceries">Groceries</SelectItem>
+                          <SelectItem value="home-decoration">
+                            Home Decoration
+                          </SelectItem>
+                          <SelectItem value="kitchen-accessories">
+                            Kitchen Accessories
+                          </SelectItem>
+                          <SelectItem value="laptops">Laptops</SelectItem>
+                          <SelectItem value="mens-shirts">
+                            Mens Shirts
+                          </SelectItem>
+                          <SelectItem value="mens-shoes">Mens Shoes</SelectItem>
+                          <SelectItem value="mens-watches">
+                            Mens Watches
+                          </SelectItem>
+                          <SelectItem value="mobile-accessories">
+                            Mobile Accessories
+                          </SelectItem>
+                          <SelectItem value="motorcycle">Motorcycle</SelectItem>
+                          <SelectItem value="skin-care">Skin Care</SelectItem>
+                          <SelectItem value="smartphones">
+                            Smartphones
+                          </SelectItem>
+                          <SelectItem value="sports-accessories">
+                            Sports Accessories
+                          </SelectItem>
+                          <SelectItem value="sunglasses">Sunglasses</SelectItem>
+                          <SelectItem value="tablets">Tablets</SelectItem>
+                          <SelectItem value="tops">Tops</SelectItem>
+                          <SelectItem value="vehicle">Vehicle</SelectItem>
+                          <SelectItem value="womens-bags">
+                            Womens Bags
+                          </SelectItem>
+                          <SelectItem value="womens-dresses">
+                            Womens Dresses
+                          </SelectItem>
+                          <SelectItem value="womens-jewellery">
+                            Womens Jewellery
+                          </SelectItem>
+                          <SelectItem value="womens-shoes">
+                            Womens Shoes
+                          </SelectItem>
+                          <SelectItem value="womens-watches">
+                            Womens Watches
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Product Description..."
+                        className="resize-none min-h-[100px]"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -176,102 +280,27 @@ const CreateProduct = () => {
 
               <FormField
                 control={form.control}
-                name="category"
+                name="thumbnail"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      value={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="beauty">Beauty</SelectItem>
-                        <SelectItem value="fragrances">Fragrances</SelectItem>
-                        <SelectItem value="furniture">Furniture</SelectItem>
-                        <SelectItem value="groceries">Groceries</SelectItem>
-                        <SelectItem value="home-decoration">
-                          Home Decoration
-                        </SelectItem>
-                        <SelectItem value="kitchen-accessories">
-                          Kitchen Accessories
-                        </SelectItem>
-                        <SelectItem value="laptops">Laptops</SelectItem>
-                        <SelectItem value="mens-shirts">Mens Shirts</SelectItem>
-                        <SelectItem value="mens-shoes">Mens Shoes</SelectItem>
-                        <SelectItem value="mens-watches">Mens Watches</SelectItem>
-                        <SelectItem value="mobile-accessories">
-                          Mobile Accessories
-                        </SelectItem>
-                        <SelectItem value="motorcycle">Motorcycle</SelectItem>
-                        <SelectItem value="skin-care">Skin Care</SelectItem>
-                        <SelectItem value="smartphones">Smartphones</SelectItem>
-                        <SelectItem value="sports-accessories">
-                          Sports Accessories
-                        </SelectItem>
-                        <SelectItem value="sunglasses">Sunglasses</SelectItem>
-                        <SelectItem value="tablets">Tablets</SelectItem>
-                        <SelectItem value="tops">Tops</SelectItem>
-                        <SelectItem value="vehicle">Vehicle</SelectItem>
-                        <SelectItem value="womens-bags">Womens Bags</SelectItem>
-                        <SelectItem value="womens-dresses">
-                          Womens Dresses
-                        </SelectItem>
-                        <SelectItem value="womens-jewellery">
-                          Womens Jewellery
-                        </SelectItem>
-                        <SelectItem value="womens-shoes">Womens Shoes</SelectItem>
-                        <SelectItem value="womens-watches">
-                          Womens Watches
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <FormLabel>Image URL</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="https://example.com/image.jpg"
+                        {...field}
+                      />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Description</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Product Description..."
-                      className="resize-none min-h-[100px]"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="thumbnail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Image URL</FormLabel>
-                  <FormControl>
-                    <Input placeholder="https://example.com/image.jpg" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" className="w-full bg-slate-900 hover:bg-slate-800">
-              {isEditMode ? "Update Product" : "Create Product"}
-            </Button>
+              <Button
+                type="submit"
+                className="w-full bg-slate-900 hover:bg-slate-800"
+              >
+                {isEditMode ? "Update Product" : "Create Product"}
+              </Button>
             </form>
           </Form>
         </CardContent>
