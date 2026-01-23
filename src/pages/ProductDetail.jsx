@@ -375,7 +375,7 @@ export default function ProductDetail() {
                 <BreadcrumbItem className="text-[11px] font-medium text-[#A3A9C2] hover:text-[#3A4980] transition-colors">
                   <BreadcrumbLink
                     asChild
-                    className="text-[#A3A9C2] hover:text-[#3A4980]"
+                    className="text-[#A3A9C2] hover:text-[#3A4980] capitalize"
                   >
                     <Link to={`/category/${product.category}`}>
                       {product.category}
