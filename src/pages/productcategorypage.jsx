@@ -22,9 +22,9 @@ export default function CategoryProductsPage() {
 
         <button
           onClick={() => navigate("/category")}
-          className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          className="hidden sm:inline-flex items-center rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
         >
-          <ArrowLeft className="mr-2 inline-block" /> Back to Categories
+          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Categories
         </button>
       </div>
 
