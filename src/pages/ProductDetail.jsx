@@ -289,7 +289,7 @@ export default function ProductDetail() {
               <ChevronLeft className="h-5 w-5" />
             </button>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
               {visibleThumbs.map((img) => (
                 <button
                   key={img}
@@ -409,9 +409,6 @@ export default function ProductDetail() {
                   type="button"
                   onClick={() => {
                     setActiveTab("reviews");
-                    document
-                      .getElementById("reviews-section")
-                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="inline-flex items-center gap-1 rounded-full bg-[#F9FAFB] px-3 py-2 text-sm font-bold text-[#E59819] border border-slate-200 hover:bg-slate-50 transition"
                 >
@@ -422,9 +419,6 @@ export default function ProductDetail() {
                   type="button"
                   onClick={() => {
                     setActiveTab("reviews");
-                    document
-                      .getElementById("reviews-section")
-                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                   className="inline-flex items-center gap-1 rounded-full bg-[#EDF0F8] px-3 py-2 text-sm font-semibold text-[#3A4980] border border-slate-200 hover:bg-blue-100 transition"
                 >
@@ -513,7 +507,7 @@ export default function ProductDetail() {
           <div className="my-5 h-px bg-[#E4E4E4]" />
 
           {/* Qty + Add to cart row */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center rounded-full bg-slate-100 px-2 py-1.5">
               <button
                 type="button"

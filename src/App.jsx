@@ -1,6 +1,6 @@
 import WishlistPage from "./pages/wishlist";
 import Home from "./pages/Home";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Category from "./pages/category";
 import CategoryProductsPage from "./pages/productcategorypage";
 import Cart from "./pages/cart";
@@ -11,12 +11,16 @@ import ContactUs from "./pages/contact";
 import CreateProduct from "./pages/CreateProduct";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
-export default function App() {
+function AppContent() {
+  const { pathname } = useLocation();
+
   return (
-    <BrowserRouter>
+    <>
+      <ScrollToTop />
       <Navbar />
-      <Routes>
+      <Routes key={pathname}>
         <Route path="/" element={<Home />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/category" element={<Category />} />
@@ -29,6 +33,14 @@ export default function App() {
         <Route path="/create-product" element={<CreateProduct />} />
       </Routes>
       <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppContent />
     </BrowserRouter>
   );
 }
