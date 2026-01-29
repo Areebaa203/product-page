@@ -157,14 +157,7 @@ export default function ContactUs() {
             </h2>
 
             <Form {...form}>
-              {isSubmitted && (
-                <div className="mb-6 flex items-center gap-3 rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 text-emerald-700">
-                  <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-500" />
-                  <p className="text-sm font-medium leading-none">
-                    Your form has been submitted successfully!
-                  </p>
-                </div>
-              )}
+
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="mt-6 space-y-5"
@@ -380,6 +373,14 @@ export default function ContactUs() {
 
             {submittedData && (
               <div className="mt-6 border-t border-slate-100 pt-6 animate-in fade-in zoom-in duration-300">
+                {isSubmitted && (
+                  <div className="mb-4 flex items-center gap-3 rounded-xl border border-emerald-100 bg-emerald-50/50 p-3 text-emerald-700">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500" />
+                    <p className="text-xs font-medium leading-none">
+                      Your form has been submitted successfully!
+                    </p>
+                  </div>
+                )}
                 <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wider">Output</h3>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[11px] text-slate-600">
                   <p><span className="font-semibold text-slate-900">Name:</span> {submittedData.name}</p>
@@ -388,7 +389,7 @@ export default function ContactUs() {
                   <p><span className="font-semibold text-slate-900">Interest:</span> {submittedData.interest}</p>
                   <div className="col-span-2 mt-1">
                     <p className="font-semibold text-slate-900">Message:</p>
-                    <p className="mt-0.5 leading-relaxed italic line-clamp-1">"{submittedData.message}"</p>
+                    <p className="mt-0.5 leading-relaxed font-inter line-clamp-1">"{submittedData.message}"</p>
                   </div>
                 </div>
               </div>
