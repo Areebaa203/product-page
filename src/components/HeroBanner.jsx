@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 const HeroBanner = () => {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-8">
         {/* CARD */}
         <div
           className="mt-16 relative rounded-2xl bg-[#F3DBF6]/60 min-h-[220px] font-inter"

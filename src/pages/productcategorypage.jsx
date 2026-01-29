@@ -8,7 +8,7 @@ export default function CategoryProductsPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-6">
+    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-8 py-6">
       {/* Top bar */}
       <div className="mb-4 flex items-center justify-between">
         <div>
@@ -29,7 +29,7 @@ export default function CategoryProductsPage() {
       </div>
 
       {/* Products */}
-      <ProductsGrid category={slug} />
+      <ProductsGrid category={slug} isNested={true} />
     </div>
   );
 }

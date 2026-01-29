@@ -34,7 +34,7 @@ const FilterRow = ({ value, onChange }) => {
   }, []);
 
   return (
-    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12">
+    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-8">
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
           <p>categories</p>

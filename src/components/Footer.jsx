@@ -43,7 +43,7 @@ export default function Footer() {
     <footer className="mt-16 border-t border-slate-100 bg-white">
       {/* Soft top strip */}
       <div className="bg-purple-50/70">
-        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-10">
+        <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-8 py-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <h3 className="text-2xl font-semibold text-slate-800">
@@ -96,7 +96,7 @@ export default function Footer() {
       </div>
 
       {/* Main footer */}
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-12">
+      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-8 py-12">
         <div className="grid gap-10 md:grid-cols-4">
           {/* Brand */}
           <div>

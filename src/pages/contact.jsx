@@ -40,7 +40,7 @@ const schema = z.object({
   phone: z
     .string()
     .trim()
-    .min(7, "Phone too short")
+    .min(7, "Enter valid phone number")
     .max(20, "Phone too long")
     .regex(/^[+()0-9\s-]+$/, "Invalid phone"),
   interest: z.string().min(1, "Select an option"),
@@ -52,6 +52,7 @@ const BRAND_HOVER = "#0F5F96";
 
 export default function ContactUs() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedData, setSubmittedData] = useState(null);
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -67,12 +68,14 @@ export default function ContactUs() {
 
   const onSubmit = async (data) => {
     setIsSubmitted(true);
+    setSubmittedData(data);
     console.log("CONTACT FORM:", data);
     form.reset();
 
-    // Smoothly hide the success message after 5 seconds
+    // Smoothly hide the success message but keep data shown
     setTimeout(() => {
       setIsSubmitted(false);
+      setSubmittedData(null); // Clear the output data after 5 seconds
     }, 5000);
   };
 
@@ -374,6 +377,22 @@ export default function ContactUs() {
                 </button>
               </form>
             </Form>
+
+            {submittedData && (
+              <div className="mt-6 border-t border-slate-100 pt-6 animate-in fade-in zoom-in duration-300">
+                <h3 className="text-sm font-bold text-slate-900 mb-3 uppercase tracking-wider">Output</h3>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[11px] text-slate-600">
+                  <p><span className="font-semibold text-slate-900">Name:</span> {submittedData.name}</p>
+                  <p><span className="font-semibold text-slate-900">Email:</span> {submittedData.email}</p>
+                  <p><span className="font-semibold text-slate-900">Phone:</span> {submittedData.phoneCode}{submittedData.phone}</p>
+                  <p><span className="font-semibold text-slate-900">Interest:</span> {submittedData.interest}</p>
+                  <div className="col-span-2 mt-1">
+                    <p className="font-semibold text-slate-900">Message:</p>
+                    <p className="mt-0.5 leading-relaxed italic line-clamp-1">"{submittedData.message}"</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

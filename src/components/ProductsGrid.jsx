@@ -15,7 +15,7 @@ import ProductCardSkeleton from "./ProductCardSkeleton";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-const ProductsGrid = ({ category }) => {
+const ProductsGrid = ({ category, isNested = false }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -135,8 +135,8 @@ const ProductsGrid = ({ category }) => {
     }
   };
 
-  return (
-    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 mt-8">
+  const gridContent = (
+    <>
       {/* Top info + actions */}
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-slate-600">
@@ -158,7 +158,7 @@ const ProductsGrid = ({ category }) => {
       {/* Grid */}
       {loading ? (
         //  Skeleton Grid (same layout as product grid)
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 12 }).map((_, i) => (
             <ProductCardSkeleton key={i} />
           ))}
@@ -166,7 +166,7 @@ const ProductsGrid = ({ category }) => {
       ) : products.length === 0 ? (
         <div className="py-10 text-slate-500">No products found.</div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {products.map((p) => (
             <ProductCard
               key={p.id}
@@ -180,13 +180,22 @@ const ProductsGrid = ({ category }) => {
         </div>
       )}
 
-      {/* Pagination */}
       <ProductPagination
         page={page}
         totalPages={totalPages}
         setPage={setPage}
         loading={loading}
       />
+    </>
+  );
+
+  if (isNested) {
+    return <div className="mt-8">{gridContent}</div>;
+  }
+
+  return (
+    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-8 mt-8">
+      {gridContent}
     </div>
   );
 };

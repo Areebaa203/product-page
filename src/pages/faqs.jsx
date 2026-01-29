@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Accordion,
   AccordionContent,
@@ -198,12 +199,12 @@ export default function FaqPage() {
                 <Row k="Hours" v="Mon-Sat • 10am-7pm" />
               </div>
 
-              <a
-                href="/contact"
+              <Link
+                to="/contact"
                 className="mt-4 inline-flex h-12 w-full items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white hover:opacity-90 active:scale-[0.99]"
               >
                 Go to Contact Page
-              </a>
+              </Link>
             </SideCard>
 
             <SideCard title="Popular topics" desc="Quick shortcuts">

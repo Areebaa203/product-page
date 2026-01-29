@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-10 md:px-12">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-10 md:px-8">
         {/* ================= MOBILE LEFT: CART (only mobile) ================= */}
         <div className="md:hidden flex items-center">
           <button
@@ -45,7 +45,7 @@ const Navbar = () => {
         </div>
 
         {/* ================= LEFT: BRAND + LINKS (grouped) ================= */}
-        <div className="flex items-center gap-10 lg:gap-15">
+        <div className="flex items-center gap-4 md:gap-3 lg:gap-15">
           <Link
             to="/"
             className="text-2xl font-extrabold italic tracking-tighter text-[#0D3356] font-inter"
@@ -54,7 +54,7 @@ const Navbar = () => {
           </Link>
 
           {/* DESKTOP MIDDLE: LINKS */}
-          <nav className="hidden md:flex items-center gap-8 lg:gap-12 text-[15px] font-medium text-[#1D364D]">
+          <nav className="hidden md:flex items-center gap-2 lg:gap-12 text-[15px] md:text-[13px] lg:text-[15px] font-medium text-[#1D364D]">
             <Link
               to="/category"
               className="hover:text-slate-900 transition-colors"
@@ -126,7 +126,7 @@ const Navbar = () => {
               alt="Profile"
               className="h-10 w-10 rounded-full object-cover"
             />
-            <div className="flex flex-col -space-y-0.5">
+            <div className="hidden lg:flex flex-col -space-y-0.5">
               <span className="text-[11px] font-medium text-[#C0C3C6]">
                 Good Morning!
               </span>

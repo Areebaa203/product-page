@@ -1,5 +1,5 @@
 // src/pages/ProductDetail.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -66,6 +66,14 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState("Small");
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
+  const reviewsRef = useRef(null);
+
+  const scrollToReviews = () => {
+    setActiveTab("reviews");
+    setTimeout(() => {
+      reviewsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
+  };
 
   // --- Review Form ---
   const [newReviewRating, setNewReviewRating] = useState(0);
@@ -250,9 +258,33 @@ export default function ProductDetail() {
   const images = Array.isArray(product.images) ? product.images : [];
   const thumbs = images.length ? images : [product.thumbnail].filter(Boolean);
 
+  const activeIdx = thumbs.indexOf(activeImg);
+  const canPrevImg = activeIdx > 0;
+  const canNextImg = activeIdx < thumbs.length - 1;
+
+  const handlePrevImg = () => {
+    if (!canPrevImg) return;
+    const newIdx = activeIdx - 1;
+    const newImg = thumbs[newIdx];
+    setActiveImg(newImg);
+    // Adjust thumb window
+    if (newIdx < thumbIndex) {
+      setThumbIndex(newIdx);
+    }
+  };
+
+  const handleNextImg = () => {
+    if (!canNextImg) return;
+    const newIdx = activeIdx + 1;
+    const newImg = thumbs[newIdx];
+    setActiveImg(newImg);
+    // Adjust thumb window
+    if (newIdx >= thumbIndex + 4) {
+      setThumbIndex(newIdx - 3);
+    }
+  };
+
   const visibleThumbs = thumbs.slice(thumbIndex, thumbIndex + 4);
-  const canPrev = thumbIndex > 0;
-  const canNext = thumbIndex + 4 < thumbs.length;
 
   // -------------------- Static UI --------------------
   const colorOptions = ["#ECDECC", "#BBD278", "#BBC1F8", "#FFD3F8", "#E9B6A6"];
@@ -262,7 +294,7 @@ export default function ProductDetail() {
   const likeCount = 109;
 
   return (
-    <div className="max-w-[1440px] mx-auto px-6 sm:px-10 md:px-12 py-10">
+    <div className="max-w-[1440px] mx-auto px-6 sm:px-10 md:px-8 py-10">
       {/* Top row */}
       <div className="grid lg:grid-cols-2 gap-12 xl:gap-24 items-start">
         {/* LEFT: Image + thumbs */}
@@ -279,8 +311,8 @@ export default function ProductDetail() {
           <div className="flex items-center gap-2 mt-2">
             <button
               type="button"
-              onClick={() => setThumbIndex((v) => Math.max(0, v - 1))}
-              disabled={!canPrev}
+              onClick={handlePrevImg}
+              disabled={!canPrevImg}
               className={[
                 "grid h-8 w-8 place-items-center text-slate-400 hover:text-slate-600 transition disabled:opacity-30",
               ].join(" ")}
@@ -313,10 +345,8 @@ export default function ProductDetail() {
 
             <button
               type="button"
-              onClick={() =>
-                setThumbIndex((v) => Math.min(thumbs.length - 4, v + 1))
-              }
-              disabled={!canNext}
+              onClick={handleNextImg}
+              disabled={!canNextImg}
               className={[
                 "grid h-8 w-8 place-items-center text-slate-400 hover:text-slate-600 transition disabled:opacity-30",
               ].join(" ")}
@@ -407,9 +437,7 @@ export default function ProductDetail() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    setActiveTab("reviews");
-                  }}
+                  onClick={scrollToReviews}
                   className="inline-flex items-center gap-1 rounded-full bg-[#F9FAFB] px-3 py-2 text-sm font-bold text-[#E59819] border border-slate-200 hover:bg-slate-50 transition"
                 >
                   ★ {Number(displayRating || 0).toFixed(1)}
@@ -417,9 +445,7 @@ export default function ProductDetail() {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setActiveTab("reviews");
-                  }}
+                  onClick={scrollToReviews}
                   className="inline-flex items-center gap-1 rounded-full bg-[#EDF0F8] px-3 py-2 text-sm font-semibold text-[#3A4980] border border-slate-200 hover:bg-blue-100 transition"
                 >
                   <MessageSquareMore className="h-4 w-4" />
@@ -713,7 +739,7 @@ export default function ProductDetail() {
             {/* Reviews */}
             <TabsContent value="reviews" className="pt-8">
               <div>
-                <h3 className="text-[20px] font-bold text-[#1D364D] mb-6">
+                <h3 className="text-[20px] font-bold text-[#1D364D] mb-6" ref={reviewsRef}>
                   Customers Feedback
                 </h3>
 
