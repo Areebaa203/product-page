@@ -83,7 +83,7 @@ export default function ContactUs() {
 
   return (
     <div className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-12">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-10 md:px-8 py-12">
         <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
           {/* LEFT CARD */}
           <div className="rounded-2xl bg-slate-50 p-7 shadow-sm border border-slate-100">

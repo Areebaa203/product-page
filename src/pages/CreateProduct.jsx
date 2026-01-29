@@ -139,7 +139,7 @@ const CreateProduct = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-6 sm:px-10 md:px-12 py-8">
+    <div className="min-h-screen bg-slate-50 px-4 sm:px-10 md:px-12 py-8">
       <Card className="mx-auto max-w-2xl">
         <CardHeader className="flex-row items-center gap-4 space-y-0">
           <Button

@@ -34,12 +34,12 @@ const FilterRow = ({ value, onChange }) => {
   }, []);
 
   return (
-    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-8">
+    <div className="mx-auto max-w-[1440px] px-4 sm:px-10 md:px-8">
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
-          <p>categories</p>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">categories</span>
           <Select value={value} onValueChange={onChange}>
-            <SelectTrigger className="h-9 w-[180px] rounded-full bg-slate-100 border-0 shadow-none text-xs font-medium">
+            <SelectTrigger className="h-9 w-full sm:w-[180px] rounded-full bg-slate-100 border-0 shadow-none text-xs font-medium">
               <SelectValue placeholder={loading ? "Loading..." : "Category"} />
             </SelectTrigger>
 

@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <header className="w-full bg-white shadow-sm sticky top-0 z-50">
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-6 sm:px-10 md:px-8">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-10 md:px-8">
         {/* ================= MOBILE LEFT: CART (only mobile) ================= */}
         <div className="md:hidden flex items-center">
           <button

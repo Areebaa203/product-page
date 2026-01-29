@@ -20,7 +20,7 @@ export default function Category() {
   const navigate = useNavigate();
 
   return (
-    <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-8">
+    <div className="mx-auto max-w-[1440px] px-4 sm:px-10 md:px-12 py-8">
       <h1 className="mb-6 text-2xl font-bold text-slate-900">
         Shop by Category
       </h1>

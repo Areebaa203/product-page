@@ -92,7 +92,7 @@ export default function FaqPage() {
 
   return (
     <div className="w-full bg-white">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-10">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-10 md:px-12 py-10">
         {/* Page header */}
         <div className="mb-6">
           <h1 className="text-2xl font-semibold text-slate-900">FAQs</h1>

@@ -17,7 +17,7 @@ function AppContent() {
   const { pathname } = useLocation();
 
   return (
-    <>
+    <div className="overflow-x-hidden">
       <ScrollToTop />
       <Navbar />
       <Routes key={pathname}>
@@ -33,7 +33,7 @@ function AppContent() {
         <Route path="/create-product" element={<CreateProduct />} />
       </Routes>
       <Footer />
-    </>
+    </div>
   );
 }
 

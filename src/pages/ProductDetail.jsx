@@ -294,7 +294,7 @@ export default function ProductDetail() {
   const likeCount = 109;
 
   return (
-    <div className="max-w-[1440px] mx-auto px-6 sm:px-10 md:px-8 py-10">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-10 md:px-8 py-10">
       {/* Top row */}
       <div className="grid lg:grid-cols-2 gap-12 xl:gap-24 items-start">
         {/* LEFT: Image + thumbs */}

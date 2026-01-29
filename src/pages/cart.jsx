@@ -21,7 +21,7 @@ export default function Cart() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-[1440px] px-6 sm:px-10 md:px-12 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-10 md:px-12 py-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* LEFT */}
         <div className="lg:col-span-2 bg-white border border-gray-200 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
